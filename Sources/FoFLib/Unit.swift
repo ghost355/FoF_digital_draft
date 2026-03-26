@@ -32,14 +32,6 @@ enum UnitStatus: String, Codable {
     case litterTeam
     case paralyzedTeam
     case casualty
-
-    var defaultExperience: ExperienceLevel {
-        switch self {
-        case .assaultTeam: return .line
-        case .fireTeam, .litterTeam, .paralyzedTeam: return .green
-        default: return .line
-        }
-    }
 }
 
 // MARK: - VOF система
@@ -140,7 +132,11 @@ struct Unit: Codable, Identifiable {
     var receivedVOF: [ReceivedVOF]
 
     // Состояние
-    var status: UnitStatus
+    var status: UnitStatus {
+        didSet {
+            updateExpirienceByStatus()
+        }
+    }
     var steps: Int
     var position: GridPosition?
     var experience: ExperienceLevel
@@ -188,5 +184,17 @@ extension Unit {
 
     var bestReceivedVOF: Int? {
         receivedVOF.map { $0.value }.min()
+    }
+
+    private mutating func updateExpirienceByStatus() {
+        switch status {
+        case .assaultTeam:
+            experience = .line
+        case .fireTeam, .litterTeam, .paralyzedTeam:
+            experience = .green
+        default:
+            // goodOrder, pinned, casualty — опыт не меняем
+            break
+        }
     }
 }
