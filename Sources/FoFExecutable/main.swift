@@ -1,0 +1,3 @@
+import FoFLib
+
+print("Hello!")
