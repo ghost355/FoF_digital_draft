@@ -11,10 +11,6 @@ enum UnitType: String, Codable {
         aboveHQ
 }
 
-enum Range: String, Codable {
-    case pointBlank, close, long, veryLong
-}
-
 enum ExperienceLevel: String, Codable {
     case green, line, veteran
 }
@@ -42,7 +38,24 @@ struct WeaponSpecial: Codable {
     let canFPL: Bool
 }
 
-struct VOF: Codable {
+enum VOF: Codable {
+    case small
+    case auto
+    case heavy
+    case autoTripod
+    case heavyTripod
+    case sniper
+    case grenade
+    case autoSmall
+    case smallGrenade
+    case autoSmallGrenade
+    case wp
+}
+
+enum Range: String, Codable {
+    case pointBlank, close, long, veryLong
+}
+struct ProducedVOF: Codable {
     let primary: Int
     let secondary: Int?
     let range: Range
