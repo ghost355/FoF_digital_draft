@@ -1,6 +1,10 @@
 // JSONLoader.swift
 import Foundation
 
+// let cards: [ActionCard] = JSONLoader.load(fromFile: "actionDeck")
+// let terrain: [TerrainCard] = JSONLoader.load(fromFile: "terrainDeck")
+// let units: [Unit] = JSONLoader.load(fromFile: "units")Ckk
+
 enum JSONLoader {
     static func load<T: Decodable>(
         _ type: T.Type, fromFile fileName: String, bundle: Bundle = .main
