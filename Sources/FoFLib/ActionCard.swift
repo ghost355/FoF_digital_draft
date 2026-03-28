@@ -119,35 +119,3 @@ class ActionDeck: Codable {
         hand.removeAll()
     }
 }
-
-// MARK: - JSON Loader
-enum JSONLoader {
-    static func loadActionCards(fromFile fileName: String, bundle: Bundle = .main) -> [ActionCard] {
-        guard let url = bundle.url(forResource: fileName, withExtension: "json") else {
-            fatalError("Файл \(fileName).json не найден")
-        }
-        
-        do {
-            let data = try Data(contentsOf: url)
-            let decoder = JSONDecoder()
-            decoder.keyDecodingStrategy = .convertFromSnakeCase
-            return try decoder.decode([ActionCard].self, from: data)
-        } catch {
-            fatalError("Ошибка парсинга \(fileName).json: \(error)")
-        }
-    }
-    
-    static func loadActionCards(fromJSON jsonString: String) -> [ActionCard] {
-        guard let data = jsonString.data(using: .utf8) else {
-            fatalError("Не удалось преобразовать строку в Data")
-        }
-        
-        do {
-            let decoder = JSONDecoder()
-            decoder.keyDecodingStrategy = .convertFromSnakeCase
-            return try decoder.decode([ActionCard].self, from: data)
-        } catch {
-            fatalError("Ошибка парсинга JSON строки: \(error)")
-        }
-    }
-}
