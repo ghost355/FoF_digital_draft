@@ -38,7 +38,7 @@ enum HitEffect: String, Codable {
 
 // MARK: - Experience Level for Hit Effects
 enum HitEffectGroup: String, Codable {
-    case veteran = "Vet"
+    case veteran = "Veteran"
     case line = "Line"
     case green = "Green"
 }
@@ -65,26 +65,8 @@ struct ActionCard: Codable {
 
     // MARK: - Вычисляемые свойства
 
-    /// Получить результат боя по NCM
-    func combatResult(for ncm: Int) -> CombatResult? {
-        combatResults.first { $0.ncm == ncm }?.result
-    }
-
-    /// Получить эффект попадания для юнита с указанным уровнем опыта
-    func hitEffect(for experience: ExperienceLevel, stepIndex: Int) -> HitEffect? {
-        let effects: [HitEffect]
-        switch experience {
-        case .veteran: effects = hitEffects.veteran
-        case .line: effects = hitEffects.line
-        case .green: effects = hitEffects.green
-        }
-
-        guard stepIndex < effects.count else { return nil }
-        return effects[stepIndex]
-    }
-
     /// Получить случайное число для указанного количества опций
-    func randomNumber(for options: Int) -> Int {
+    func getRandomNumber(for options: Int) -> Int {
         return randomNumberTable[options - 2]
     }
 
@@ -99,10 +81,14 @@ class ActionDeck: Codable {
     var draw: [ActionCard]
     var discard: [ActionCard] = []
     var hand: [ActionCard] = []
-    let reshuffleCardId: Int  // ID карты которая означает перемешивание  = 51
+    var reshuffleCardId: Int = 51
+
+    init(deck: [ActionCard]) {
+        draw = deck.shuffled()
+    }
 
     private func drawOneCard() -> ActionCard {
-        var card = draw.popLast()!
+        var card = draw.removeLast()
         if card.id == reshuffleCardId {
             reshuffleDeck(reshuffleCard: card)
             // тянем другую карту (уже гарантированно не карта перемешинвания)
@@ -112,14 +98,12 @@ class ActionDeck: Codable {
     }
 
     private func reshuffleDeck(reshuffleCard: ActionCard) {
-        // пермешиваем карты из колоды и из сброса
-        let totalPile = discard + draw
-        let middlePoint = totalPile.count / 2
-        var bottomHalf = totalPile[..<middlePoint]
-        let topHalf = totalPile[middlePoint...]
-        // в нижнюю полуколоду помещаем карту перемещивания
-        bottomHalf.append(reshuffleCard)
-        draw = bottomHalf.shuffled() + topHalf.shuffled()
+        // Кладем сброс в колоду, перемешиваем все, и помещаем карту сброса в случайное место в нижнюю половину колоды
+        draw += discard
+        discard.removeAll()
+        draw.shuffle()
+        let randomIndexBottomHalf = Int.random(in: 0..<(draw.count / 2))
+        draw.insert(reshuffleCard, at: randomIndexBottomHalf)
     }
 
     /// Взятьtop N карт и поместить их в Руку
