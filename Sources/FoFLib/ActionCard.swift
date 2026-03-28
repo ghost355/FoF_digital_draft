@@ -58,6 +58,7 @@ struct ActionCard: Codable {
     let id: Int  // Номер карты в колоде
     let activatedCommands: Int
     let initiativeCommands: Int
+    let atNumber: Int
     let icons: [ActionIcon]
     let combatResults: [CombatResultEntry]
     let hitEffects: HitEffects
@@ -78,16 +79,16 @@ struct ActionCard: Codable {
 
 // MARK: - Action Deck
 class ActionDeck: Codable {
-    var draw: [ActionCard]
-    var discard: [ActionCard] = []
-    var hand: [ActionCard] = []
-    var reshuffleCardId: Int = 51
+    private var draw: [ActionCard]
+    private var discard: [ActionCard] = []
+    private var hand: [ActionCard] = []
 
     init(deck: [ActionCard]) {
         draw = deck.shuffled()
     }
 
     private func drawOneCard() -> ActionCard {
+        let reshuffleCardId = 51
         var card = draw.removeLast()
         if card.id == reshuffleCardId {
             reshuffleDeck(reshuffleCard: card)
@@ -106,7 +107,7 @@ class ActionDeck: Codable {
         draw.insert(reshuffleCard, at: randomIndexBottomHalf)
     }
 
-    /// Взятьtop N карт и поместить их в Руку
+    /// Взять top N карт и поместить их в Руку
     func draw(count: Int) {
         for _ in (0..<count) {
             hand.append(drawOneCard())
@@ -119,28 +120,34 @@ class ActionDeck: Codable {
     }
 }
 
-// MARK: - Action Draw Result (используется в игре)
-struct ActionDrawResult: Codable {
-    let cards: [ActionCard]
-    let icons: [ActionIcon]
-    let combatResult: CombatResult?
-    let hitEffects: [HitEffect]
-    let randomNumber: Int?
-
-    var hasIcon: (ActionIcon) -> Bool {
-        { icons.contains($0) }
+// MARK: - JSON Loader
+enum JSONLoader {
+    static func loadActionCards(fromFile fileName: String, bundle: Bundle = .main) -> [ActionCard] {
+        guard let url = bundle.url(forResource: fileName, withExtension: "json") else {
+            fatalError("Файл \(fileName).json не найден")
+        }
+        
+        do {
+            let data = try Data(contentsOf: url)
+            let decoder = JSONDecoder()
+            decoder.keyDecodingStrategy = .convertFromSnakeCase
+            return try decoder.decode([ActionCard].self, from: data)
+        } catch {
+            fatalError("Ошибка парсинга \(fileName).json: \(error)")
+        }
     }
-}
-
-// MARK: - JSON Keys для парсинга
-extension ActionCard {
-    enum CodingKeys: String, CodingKey {
-        case id
-        case activatedCommands = "activated_commands"
-        case initiativeCommands = "initiative_commands"
-        case icons = "icons"
-        case combatResults = "combat_results"  // было combatResolution
-        case hitEffects = "hit_effects"
-        case randomNumberTable = "random_number_table"
+    
+    static func loadActionCards(fromJSON jsonString: String) -> [ActionCard] {
+        guard let data = jsonString.data(using: .utf8) else {
+            fatalError("Не удалось преобразовать строку в Data")
+        }
+        
+        do {
+            let decoder = JSONDecoder()
+            decoder.keyDecodingStrategy = .convertFromSnakeCase
+            return try decoder.decode([ActionCard].self, from: data)
+        } catch {
+            fatalError("Ошибка парсинга JSON строки: \(error)")
+        }
     }
 }
