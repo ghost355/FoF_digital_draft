@@ -30,25 +30,24 @@ enum UnitStatus: String, Codable {
     case casualty
 }
 
-// MARK: - VOF система
-struct WeaponSpecial: Codable {
-    let isTripod: Bool
-    let canGrazingFire: Bool
-    let canOverheadFire: Bool
-    let canFPL: Bool
-}
-
 enum VOF: Codable {
     case small
     case auto
+    // heavy has OverheadFire
     case heavy
+    // tripod has GrasingFire, OverheadFire, FPL
     case autoTripod
     case heavyTripod
+
     case sniper
     case grenade
     case autoSmall
     case smallGrenade
     case autoSmallGrenade
+
+    case flamethrower
+    case demolition
+
     case wp
 }
 
@@ -135,7 +134,7 @@ struct BreakdownResult: Codable {
 // MARK: - Unit
 struct Unit: Codable, Identifiable {
     // Идентификация
-    let id: String
+    let id: UUID
     let name: String
     let side: Side
     let type: UnitType
@@ -156,10 +155,7 @@ struct Unit: Codable, Identifiable {
     var isExposed: Bool
     var ammo: [AmmoType: Int]
     var equipment: [EquipmentID]
-
-    // Подчинение (неизменяемое после создания)
-    let assignedTo: String?
-
+    var assignedTo: String?
     // Правила разделения
     let breakdown: [UnitBreakdown]?
 
@@ -193,10 +189,6 @@ extension Unit {
 
     var isCasualty: Bool {
         status == .casualty
-    }
-
-    var bestReceivedVOF: Int? {
-        receivedVOF.map { $0.value }.min()
     }
 
     private mutating func updateExpirienceByStatus() {
