@@ -2,6 +2,7 @@
 import Foundation
 
 // MARK: - Основные перечисления
+
 enum Side: String, Codable {
     case us, german, northKorean, vietcong, nva, katusa, chinese
 }
@@ -20,6 +21,7 @@ enum MovementType: String, Codable {
 }
 
 // MARK: - Состояния
+
 enum UnitStatus: String, Codable {
     case goodOrder
     case pinned
@@ -33,7 +35,7 @@ enum UnitStatus: String, Codable {
 enum VOF: Codable {
     case small
     case auto
-    // heavy has OverheadFire
+    /// heavy has OverheadFire
     case heavy
     // tripod has GrasingFire, OverheadFire, FPL
     case autoTripod
@@ -54,14 +56,9 @@ enum VOF: Codable {
 enum Range: String, Codable {
     case pointBlank, close, long, veryLong
 }
-struct ProducedVOF: Codable {
-    let primary: Int
-    let secondary: Int?
-    let range: Range
-    let special: WeaponSpecial?
-}
 
 // MARK: - Индивидуальные VOF эффекты
+
 enum ReceivedVOFType: String, Codable {
     case sniper
     case concentratedFire
@@ -79,6 +76,7 @@ struct ReceivedVOF: Codable {
 }
 
 // MARK: - Боеприпасы и снаряжение
+
 enum AmmoType: String, Codable {
     case mg, mortar, rcl, rocket, flamethrower, demolition, rifleGrenade
 }
@@ -94,6 +92,7 @@ enum SmokeColor: String, Codable {
 }
 
 // MARK: - Вспомогательные структуры
+
 struct VehicleStats: Codable {
     let armorValue: Int
     let passengerCapacity: Int
@@ -107,6 +106,7 @@ struct GridPosition: Codable {
 }
 
 // MARK: - Fire Mission (глобальный VOF на карту)
+
 struct FireMission: Codable {
     let type: FireMissionType
     let value: Int
@@ -118,6 +118,7 @@ enum FireMissionType: String, Codable {
 }
 
 // MARK: - Unit Breakdown
+
 struct UnitBreakdown: Codable {
     let fromSteps: Int
     let result: [BreakdownResult]
@@ -126,29 +127,31 @@ struct UnitBreakdown: Codable {
 struct BreakdownResult: Codable {
     let type: UnitType
     let steps: Int
-    let vofProfiles: [VOF]
+    let vof: VOF
+    let range: Range
     let experience: ExperienceLevel?
     let transferAmmo: Bool
 }
 
 // MARK: - Unit
+
 struct Unit: Codable, Identifiable {
     // Идентификация
     let id: UUID
     let name: String
     let side: Side
     let type: UnitType
-
-    // Боевые характеристики
-    let vofProfiles: [VOF]
-    var receivedVOF: [ReceivedVOF]
+    let vof: VOF
+    let range: Range
 
     // Состояние
+
     var status: UnitStatus {
         didSet {
             updateExpirienceByStatus()
         }
     }
+
     var steps: Int
     var position: GridPosition?
     var experience: ExperienceLevel
@@ -156,10 +159,10 @@ struct Unit: Codable, Identifiable {
     var ammo: [AmmoType: Int]
     var equipment: [EquipmentID]
     var assignedTo: String?
-    // Правила разделения
+    /// Правила разделения
     let breakdown: [UnitBreakdown]?
 
-    // Опционально
+    /// Опционально
     let vehicleStats: VehicleStats?
 
     // Визуальные
@@ -169,6 +172,7 @@ struct Unit: Codable, Identifiable {
 }
 
 // MARK: - Вычисляемые свойства
+
 extension Unit {
     var isGoodOrder: Bool {
         status == .goodOrder && !isPinned

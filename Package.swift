@@ -1,4 +1,4 @@
-// swift-tools-version: 6.2
+// swift-tools-version: 6.0.3
 
 import PackageDescription
 
@@ -8,11 +8,12 @@ let package = Package(
         .library(
             name: "FoFLib",
             targets: ["FoFLib"]
-        ),
+        )
     ],
     targets: [
         .target(
-            name: "FoFLib"
+            name: "FoFLib",
+            resources: [.process("Resources")]
         ),
         .executableTarget(
             name: "FoFExecutable",
