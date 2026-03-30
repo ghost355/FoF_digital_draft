@@ -9,6 +9,10 @@ struct ActionCard: Codable {
     let combatResults: [CombatResult]
     let hitEffects: HitEffectTable
     let randomNumberTable: [Int]
+    var image: String {
+        String("actionCard_\(id).png")
+    }
+    let bgImage = "actionCard_BG.png"
 }
 
 extension ActionCard {
