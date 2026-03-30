@@ -13,6 +13,8 @@ let package = Package(
     targets: [
         .target(
             name: "FoFLib",
+            dependencies: [],
+            path: "Sources/FoFLib",
             resources: [.process("Resources")]
         ),
         .executableTarget(
