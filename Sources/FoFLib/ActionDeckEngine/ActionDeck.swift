@@ -22,15 +22,17 @@ final class ActionDeck {
 
     var currentHand: [ActionCard] { hand }
 
-    var count: Int { drawDeck.count + discardPile.count }
+    var totalCount: Int { drawDeck.count + discardPile.count }
+    var drawDeckCount: Int { drawDeck.count }
+    var discardPileCount: Int { discardPile.count }
+    var handCount: Int { hand.count }
 
 }
 
 extension ActionDeck {
     private func drawOneCard() -> ActionCard {
-        let reshuffleCardId = 51
         var card = drawDeck.removeLast()
-        if card.id == reshuffleCardId {
+        if card.isReshuffleCard {
             reshuffleDeck(reshuffleCard: card)
             card = drawOneCard()
         }

@@ -9,10 +9,6 @@ struct ActionCard: Codable {
     let combatResults: [CombatResult]
     let hitEffects: HitEffectTable
     let randomNumberTable: [Int]
-    var image: String {
-        String("actionCard_\(id).png")
-    }
-    let bgImage = "actionCard_BG.png"
 }
 
 extension ActionCard {
@@ -28,6 +24,9 @@ extension ActionCard {
         let clampedNCM = min(max(ncm, -4), 6)
         return combatResults[clampedNCM + 4]
     }
+
+    var isReshuffleCard: Bool { id == 51 }
+
 }
 
 enum ActionCardIcon: String, Codable {
