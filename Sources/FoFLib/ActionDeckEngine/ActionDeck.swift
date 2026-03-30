@@ -5,8 +5,8 @@ final class ActionDeck {
     private var discardPile: [ActionCard] = []
     private var hand: [ActionCard] = []
 
-    init(actionDeck: [ActionCard]) {
-        drawDeck = actionDeck.shuffled()
+    init(cards: [ActionCard]) {
+        drawDeck = cards.shuffled()
     }
 
     func draw(count: Int) {
