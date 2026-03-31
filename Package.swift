@@ -23,7 +23,8 @@ let package = Package(
         ),
         .testTarget(
             name: "FoFLibTests",
-            dependencies: ["FoFLib"]
+            dependencies: ["FoFLib"],
+            path: "Tests/FoFLibTest"
         ),
     ]
 )
