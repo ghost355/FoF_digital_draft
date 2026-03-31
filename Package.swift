@@ -24,7 +24,8 @@ let package = Package(
         .testTarget(
             name: "FoFLibTests",
             dependencies: ["FoFLib"],
-            path: "Tests/FoFLibTest"
+            path: "Tests/FoFLibTest",
+            resources: [.process("Resources")]
         ),
     ]
 )
