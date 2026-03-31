@@ -31,49 +31,54 @@ final class ActionDeckEngine {
     init(cards: [ActionCard]) {
         deck = ActionDeck(cards: cards)
     }
+
+    private func discardAndDrawCards(_ count: Int) -> ActionCard {
+        deck.discardHand()
+        deck.draw(count: count)
+        return deck.currentHand
+    }
+
     func randomNumber(_ options: Int) -> Int {
-        let card = helperDrawOneCard()
-        return card.randomNumber(for: options)
+        let cards = discardAndDrawCards(1)
+        return cards[0].randomNumber(for: options)
 
     }
 
     func activatedCommands() -> Int {
-        let card = helperDrawOneCard()
-        return card.activatedCommands
+        let cards = discardAndDrawCards(1)
+        return cards[0].activatedCommands
     }
 
     func initiativeCommands() -> Int {
-        let card = helperDrawOneCard()
-        return card.initiativeCommands
+        let cards = discardAndDrawCards(1)
+        return cards[0].initiativeCommands
     }
 
     func atNumber() -> Int {
-        let card = helperDrawOneCard()
-        return card.atNumber
+        let cards = discardAndDrawCards(1)
+        return cards[0].atNumber
     }
 
     func hqEvent() -> AttemptResult {
-        let card = helperDrawOneCard()
-        if card.hasIcon(.hqEvent) {
+        let cards = discardAndDrawCards(1)
+        if cards[0].hasIcon(.hqEvent) {
             return .success
         }
         return .failure
     }
 
     func mines() -> AttemptResult {
-        deck.discardHand()
-        deck.draw(count: 3)
         let icons: [ActionCardIcon] = [.burst, .tripleBurst, .short]
-        let cards = deck.currentHand
+        let cards = discardAndDrawCards(3)
         if cards.contains(where: { card in card.icons.contains { icons.contains($0) } }) {
             return .success
         }
         return .failure
     }
 
-    private func helperDrawOneCard() -> ActionCard {
+    func infiltration(cards: Int) -> AttemptResult {
         deck.discardHand()
-        deck.draw(count: 1)
-        return deck.currentHand[0]
+        deck.draw(count: Int)
+
     }
 }
