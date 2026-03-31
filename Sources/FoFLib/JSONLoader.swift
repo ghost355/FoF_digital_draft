@@ -1,6 +1,6 @@
 import Foundation
 
-public func loadJSON<T: Decodable>(
+ func loadJSON<T: Decodable>(
     _ filename: String, as type: T.Type, from bundle: Bundle
 )
     -> T

@@ -1,12 +1,12 @@
 // ActionDeckEngine.swift
 
-public enum AttemptResult {
+ enum AttemptResult {
     case success, failure
     case jam, short, mines
     case criticalHit, bnFireMisson
 }
 
-public enum AttempType {
+ enum AttempType {
     case none
     case random(for: Int)
     case activationCommands
@@ -25,38 +25,34 @@ public enum AttempType {
     case mines
 }
 
-public final class ActionDeckEngine {
-    private var deck: ActionDeck
+ final class ActionDeckEngine {
+    var deck: ActionDeck
 
-    public init() {
-        let cards: [ActionCard] = loadJSON(
-            "actionDeck", as: [ActionCard].self, from: .module
-        )
-        let actionDeck = ActionDeck(cards: cards)
-        deck = actionDeck
+     init(cards: [ActionCard]) {
+        deck = ActionDeck(cards: cards)
     }
-    public func randomNumber(_ options: Int) -> Int {
+     func randomNumber(_ options: Int) -> Int {
         let card = helperDrawOneCard()
         return card.randomNumber(for: options)
 
     }
 
-    public func activatedCommands() -> Int {
+     func activatedCommands() -> Int {
         let card = helperDrawOneCard()
         return card.activatedCommands
     }
 
-    public func initiativeCommands() -> Int {
+     func initiativeCommands() -> Int {
         let card = helperDrawOneCard()
         return card.initiativeCommands
     }
 
-    public func atNumber() -> Int {
+     func atNumber() -> Int {
         let card = helperDrawOneCard()
         return card.atNumber
     }
 
-    public func hqEvent() -> AttemptResult {
+     func hqEvent() -> AttemptResult {
         let card = helperDrawOneCard()
         if card.hasIcon(.hqEvent) {
             return .success
@@ -64,7 +60,7 @@ public final class ActionDeckEngine {
         return .failure
     }
 
-    public func mines() -> AttemptResult {
+     func mines() -> AttemptResult {
         deck.discardHand()
         deck.draw(count: 3)
         let icons: [ActionCardIcon] = [.burst, .tripleBurst, .short]
