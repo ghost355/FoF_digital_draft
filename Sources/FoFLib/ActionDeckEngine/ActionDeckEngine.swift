@@ -1,12 +1,12 @@
 // ActionDeckEngine.swift
 
- enum AttemptResult {
+enum AttemptResult {
     case success, failure
     case jam, short, mines
     case criticalHit, bnFireMisson
 }
 
- enum AttempType {
+enum AttempType {
     case none
     case random(for: Int)
     case activationCommands
@@ -25,34 +25,34 @@
     case mines
 }
 
- final class ActionDeckEngine {
+final class ActionDeckEngine {
     var deck: ActionDeck
 
-     init(cards: [ActionCard]) {
+    init(cards: [ActionCard]) {
         deck = ActionDeck(cards: cards)
     }
-     func randomNumber(_ options: Int) -> Int {
+    func randomNumber(_ options: Int) -> Int {
         let card = helperDrawOneCard()
         return card.randomNumber(for: options)
 
     }
 
-     func activatedCommands() -> Int {
+    func activatedCommands() -> Int {
         let card = helperDrawOneCard()
         return card.activatedCommands
     }
 
-     func initiativeCommands() -> Int {
+    func initiativeCommands() -> Int {
         let card = helperDrawOneCard()
         return card.initiativeCommands
     }
 
-     func atNumber() -> Int {
+    func atNumber() -> Int {
         let card = helperDrawOneCard()
         return card.atNumber
     }
 
-     func hqEvent() -> AttemptResult {
+    func hqEvent() -> AttemptResult {
         let card = helperDrawOneCard()
         if card.hasIcon(.hqEvent) {
             return .success
@@ -60,7 +60,7 @@
         return .failure
     }
 
-     func mines() -> AttemptResult {
+    func mines() -> AttemptResult {
         deck.discardHand()
         deck.draw(count: 3)
         let icons: [ActionCardIcon] = [.burst, .tripleBurst, .short]
