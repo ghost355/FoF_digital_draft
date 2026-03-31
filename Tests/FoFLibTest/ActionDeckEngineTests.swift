@@ -32,5 +32,27 @@ final class ActionDeckEngineTests: XCTestCase {
         return card
     }
 
-    func testHqEvent_cardHasHqEvetnIcon
+    func testHqEvent_cardHasHqEventIcon_returnSuccess() {
+        // 1. ARRANGE - подготоваливаем тестовые данные
+        let card = makeCard(icons: [.hqEvent])
+        let engine = ActionDeckEngine(cards: [card])
+
+        // 2. ACT - выполняем действие
+        let result = engine.hqEvent()
+
+        // 3. ASSERT - проверяем результат
+        XCTAssertEqual(result, .success)
+    }
+
+    func testHqEvent_cardHasHqEventIcon_returnFailure() {
+        // 1. ARRANGE - подготоваливаем тестовые данные
+        let card = makeCard(icons: [.crosshairs, .rally])
+        let engine = ActionDeckEngine(cards: [card])
+
+        // 2. ACT - выполняем действие
+        let result = engine.hqEvent()
+
+        // 3. ASSERT - проверяем результат
+        XCTAssertEqual(result, .failure)
+    }
 }
