@@ -172,9 +172,9 @@ final class ActionDeckTests: XCTestCase {
         let reshuffleCardIndex = deck.testableDrawDeck.firstIndex { $0.id == 51 }
         
         if let index = reshuffleCardIndex {
-            // Если reshuffle карта в колоде - она должна быть в первой половине
+            // Если reshuffle карта в колоде - она должна быть в первой половине или строго до middle
             let middleIndex = deck.testableDrawDeck.count / 2
-            XCTAssertTrue(index < middleIndex, "Reshuffle card at index \(index), middle is \(middleIndex)")
+            XCTAssertLessThan(index, middleIndex, "Reshuffle card at index \(index), middle is \(middleIndex)")
         }
         // Тест проходит если reshuffle карта либо была вытянута (recursion),
         // либо осталась в колоде в правильной позиции
