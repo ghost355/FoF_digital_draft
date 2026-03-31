@@ -1,0 +1,30 @@
+[
+  {
+    "id": 1,
+    "activatedCommands": 3,
+    "initiativeCommands": 2,
+    "atNumber": 5,
+    "icons": ["burst", "contact"],
+    "combatResults": ["miss", "miss", "miss", "miss", "miss", "miss", "miss", "miss", "miss", "miss", "miss"],
+    "hitEffects": {
+      "veteran": ["C"],
+      "line": ["P"],
+      "green": ["L"]
+    },
+    "randomNumberTable": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+  },
+  {
+    "id": 51,
+    "activatedCommands": 0,
+    "initiativeCommands": 0,
+    "atNumber": 0,
+    "icons": [],
+    "combatResults": ["miss", "miss", "miss", "miss", "miss", "miss", "miss", "miss", "miss", "miss", "miss"],
+    "hitEffects": {
+      "veteran": [],
+      "line": [],
+      "green": []
+    },
+    "randomNumberTable": [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+  }
+]
