@@ -1,5 +1,4 @@
 import FoFLib
 import Foundation
 
-print("Hello mazafaka")
-let engine = ActionDeckEngine()
+print("Just print Hello!")
