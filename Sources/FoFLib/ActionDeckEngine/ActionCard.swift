@@ -32,6 +32,7 @@ extension ActionCard {
 enum ActionCardIcon: String, Codable {
     case infiltrate
     case contact
+    case rally
     case cover
     case crosshairs
     case grenade
