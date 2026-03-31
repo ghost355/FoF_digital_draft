@@ -26,6 +26,8 @@ final class ActionDeck {
     var drawDeckCount: Int { drawDeck.count }
     var discardPileCount: Int { discardPile.count }
     var handCount: Int { hand.count }
+    
+    var testableDrawDeck: [ActionCard] { drawDeck }
 
 }
 
