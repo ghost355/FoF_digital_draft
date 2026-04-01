@@ -32,7 +32,7 @@ final class ActionDeckEngine {
         deck = ActionDeck(cards: cards)
     }
 
-    private func discardAndDrawCards(_ count: Int) -> ActionCard {
+    private func discardAndDrawCards(_ count: Int) -> [ActionCard] {
         deck.discardHand()
         deck.draw(count: count)
         return deck.currentHand
@@ -76,9 +76,12 @@ final class ActionDeckEngine {
         return .failure
     }
 
-    func infiltration(cards: Int) -> AttemptResult {
-        deck.discardHand()
-        deck.draw(count: Int)
-
+    func infiltration(count: Int) -> AttemptResult {
+        let icons: [ActionCardIcon] = [.infiltrate]
+        let cards = discardAndDrawCards(count)
+        if cards.contains(where: { card in card.icons.contains { icons.contains($0) } }) {
+            return .success
+        }
+        return .failure
     }
 }
