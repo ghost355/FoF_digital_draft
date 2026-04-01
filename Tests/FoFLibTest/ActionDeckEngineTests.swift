@@ -62,9 +62,20 @@ final class ActionDeckEngineTests: XCTestCase {
         let engine = ActionDeckEngine(cards: [card])
 
         // 2. ACT
-        let result = engine.infiltration(cards: 1)
+        let result = engine.infiltration(count: 1)
 
         // 3. ASSERT
         XCTAssertEqual(result, .success)
+    }
+    func testInfiltration_handContainsInfiltrateIcon_returnFailure() {
+        // 1. ARRANGE
+        let card = makeCard(icons: [.crosshairs, .rally])
+        let engine = ActionDeckEngine(cards: [card])
+
+        // 2. ACT
+        let result = engine.infiltration(count: 1)
+
+        // 3. ASSERT
+        XCTAssertEqual(result, .failure)
     }
 }
