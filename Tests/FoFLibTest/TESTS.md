@@ -5,10 +5,10 @@
 | Файл | Тестов | Описание |
 |------|--------|----------|
 | `ActionCardTests.swift` | 15 | Тесты структуры `ActionCard` |
-| `ActionDeckEngineTests.swift` | 2 | Тесты методов `ActionDeckEngine` |
+| `ActionDeckEngineTests.swift` | 25 | Тесты методов `ActionDeckEngine` |
 | `ActionDeckTests.swift` | 13 | Тесты логики `ActionDeck` |
 | `JSONLoaderTests.swift` | 3 | Тесты загрузки JSON |
-| **Итого** | **33** | |
+| **Итого** | **56** | |
 
 ---
 
@@ -58,7 +58,50 @@
 | Тест | Описание |
 |------|----------|
 | `testHqEvent_cardHasHqEventIcon_returnSuccess` | Карта с иконкой `hqEvent` → `.success` |
-| `testHqEvent_cardHasHqEventIcon_returnFailure` | Карта без иконки `hqEvent` → `.failure` |
+| `testHqEvent_cardLacksHqEventIcon_returnFailure` | Карта без иконки `hqEvent` → `.failure` |
+
+### mines (вытягивает 3 карты)
+
+| Тест | Описание |
+|------|----------|
+| `testMines_handContainsBurstIcon_returnSuccess` | Карта с `burst` → `.success` |
+| `testMines_handContainsTripleBurstIcon_returnSuccess` | Карта с `tripleBurst` → `.success` |
+| `testMines_handContainsShortIcon_returnSuccess` | Карта с `short` → `.success` |
+| `testMines_handLacksBurstIcons_returnFailure` | Карты без нужных иконок → `.failure` |
+| `testMines_multipleCards_noneHasBurstIcon_returnFailure` | Несколько карт, ни одна с нужной иконкой → `.failure` |
+
+### infiltration
+
+| Тест | Описание |
+|------|----------|
+| `testInfiltration_cardHasInfiltrateIcon_returnSuccess` | Одна карта с `infiltrate` → `.success` |
+| `testInfiltration_cardLacksInfiltrateIcon_returnFailure` | Одна карта без `infiltrate` → `.failure` |
+| `testInfiltration_multipleCards_oneHasInfiltrateIcon_returnSuccess` | 3 карты, хотя бы одна с `infiltrate` → `.success` |
+| `testInfiltration_multipleCards_noneHasInfiltrateIcon_returnFailure` | 3 карты, ни одна с `infiltrate` → `.failure` |
+| `testInfiltration_multipleCards_infiltrateAtFirstPosition_returnSuccess` | 3 карты, `infiltrate` первая → `.success` |
+| `testInfiltration_multipleCards_infiltrateAtLastPosition_returnSuccess` | 3 карты, `infiltrate` последняя → `.success` |
+
+### cover
+
+| Тест | Описание |
+|------|----------|
+| `testCover_cardHasCoverIcon_returnSuccess` | Одна карта с `cover` → `.success` |
+| `testCover_cardLacksCoverIcon_returnFailure` | Одна карта без `cover` → `.failure` |
+| `testCover_multipleCards_oneHasCoverIcon_returnSuccess` | 3 карты, хотя бы одна с `cover` → `.success` |
+| `testCover_multipleCards_noneHasCoverIcon_returnFailure` | 3 карты, ни одна с `cover` → `.failure` |
+| `testCover_multipleCards_coverAtFirstPosition_returnSuccess` | 3 карты, `cover` первая → `.success` |
+| `testCover_multipleCards_coverAtLastPosition_returnSuccess` | 3 карты, `cover` последняя → `.success` |
+
+### rally
+
+| Тест | Описание |
+|------|----------|
+| `testRally_cardHasRallyIcon_returnSuccess` | Одна карта с `rally` → `.success` |
+| `testRally_cardLacksRallyIcon_returnFailure` | Одна карта без `rally` → `.failure` |
+| `testRally_multipleCards_oneHasRallyIcon_returnSuccess` | 3 карты, хотя бы одна с `rally` → `.success` |
+| `testRally_multipleCards_noneHasRallyIcon_returnFailure` | 3 карты, ни одна с `rally` → `.failure` |
+| `testRally_multipleCards_rallyAtFirstPosition_returnSuccess` | 3 карты, `rally` первая → `.success` |
+| `testRally_multipleCards_rallyAtLastPosition_returnSuccess` | 3 карты, `rally` последняя → `.success` |
 
 ---
 
@@ -116,54 +159,15 @@
 
 ---
 
-## Структура тестов (AAA)
-
-Каждый тест следует паттерну **Arrange-Act-Assert**:
-
-```swift
-func testExample() {
-    // 1. ARRANGE - подготовка тестовых данных
-    let card = makeCard(...)
-    let engine = ActionDeckEngine(cards: [card])
-    
-    // 2. ACT - выполнение действия
-    let result = engine.someMethod()
-    
-    // 3. ASSERT - проверка результата
-    XCTAssertEqual(result, .expectedValue)
-}
-```
-
----
-
 ## Запуск тестов
 
 ```bash
 swift test
 ```
 
-Для запуска конкретного теста:
+Для запуска конкретного набора тестов:
 
 ```bash
-swift test --filter ActionCardTests
-swift test --filter testHasIcon
-```
-
----
-
-## Тестовые данные
-
-Тесты используют `makeCard` helper для создания тестовых карт с контролируемыми параметрами:
-
-```swift
-private func makeCard(
-    id: Int = 1,
-    activatedCommands: Int = 0,
-    initiativeCommands: Int = 0,
-    atNumber: Int = 0,
-    icons: [ActionCardIcon] = [],
-    combatResults: [CombatResult] = [...],
-    hitEffects: HitEffectTable = ...,
-    randomNumberTable: [Int] = [...]
-) -> ActionCard
+swift test --filter ActionDeckEngineTests
+swift test --filter testInfiltration
 ```
