@@ -84,4 +84,12 @@ final class ActionDeckEngine {
         }
         return .failure
     }
+    func cover(count: Int) -> AttemptResult {
+        let icons: [ActionCardIcon] = [.cover]
+        let cards = discardAndDrawCards(count)
+        if cards.contains(where: { card in card.icons.contains { icons.contains($0) } }) {
+            return .success
+        }
+        return .failure
+    }
 }
