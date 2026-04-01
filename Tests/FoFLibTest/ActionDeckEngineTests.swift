@@ -78,4 +78,28 @@ final class ActionDeckEngineTests: XCTestCase {
         // 3. ASSERT
         XCTAssertEqual(result, .failure)
     }
+
+    func testCover_handContainsCover_returnSuccess() {
+        // 1. ARRANGE
+        let card = makeCard(icons: [.cover])
+        let engine = ActionDeckEngine(cards: [card])
+
+        // 2. ACT
+        let result = engine.cover(count: 1)
+
+        // 3. ASSERT
+        XCTAssertEqual(result, .success)
+    }
+
+    func testCover_handContainsCover_returnFailure() {
+        // 1. ARRANGE
+        let card = makeCard(icons: [.cover])
+        let engine = ActionDeckEngine(cards: [card])
+
+        // 2. ACT
+        let result = engine.cover(count: 1)
+
+        // 3. ASSERT
+        XCTAssertEqual(result, .failure)
+    }
 }
