@@ -16,13 +16,14 @@ enum AttempType {
     case hitEffect
     case hqEvent
     case infiltration(cards: Int)
+    case rally(cards: Int)
     case cover(cards: Int)
     case spotting(cards: Int)
     case contact(cards: Int)
+    case mines
     case grenade(cards: Int, canJam: Bool)
     case concentrate(cards: Int, canJam: Bool)
     case callForFire(cards: Int, hasBnFireMission: Bool)
-    case mines
 }
 
 final class ActionDeckEngine {
@@ -59,13 +60,6 @@ final class ActionDeckEngine {
         return cards[0].atNumber
     }
 
-    func hqEvent() -> AttemptResult {
-        let cards = discardAndDrawCards(1)
-        if cards[0].hasIcon(.hqEvent) {
-            return .success
-        }
-        return .failure
-    }
     func combatResult(ncm: Int) -> CombatResult {
         let cards = discardAndDrawCards(1)
         return cards[0].combatResult(ncm: ncm)
@@ -74,6 +68,14 @@ final class ActionDeckEngine {
     func hitEffect(experience: ExperienceLevel) -> [HitEffect] {
         let cards = discardAndDrawCards(1)
         return cards[0].hitEffects(experience: experience)
+    }
+
+    func hqEvent() -> AttemptResult {
+        let cards = discardAndDrawCards(1)
+        if cards[0].hasIcon(.hqEvent) {
+            return .success
+        }
+        return .failure
     }
 
     func mines() -> AttemptResult {
