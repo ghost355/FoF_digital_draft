@@ -131,4 +131,23 @@ final class ActionDeckEngine {
         }
         return .failure
     }
+
+    func grenade(count: Int, canJammed: Bool) -> AttemptResult {
+        let cards = discardAndDrawCards(count)
+
+        let hasJamIcon = cards.contains { $0.icons.contains(.jam) }
+        let grenadeCount = cards.filter { $0.icons.contains(.grenade) }.count
+
+        if canJammed && hasJamIcon {
+            return .jam
+        }
+        switch grenadeCount {
+        case 0:
+            return .failure
+        case 1:
+            return .success
+        default:
+            return .criticalHit
+        }
+    }
 }
