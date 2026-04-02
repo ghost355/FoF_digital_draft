@@ -16,10 +16,10 @@ enum AttempType {
     case hitEffect
     case hqEvent
     case infiltration(cards: Int)
-    case rally(cards: Int)
     case cover(cards: Int)
     case spotting(cards: Int)
     case contact(cards: Int)
+    case rally(cards: Int)
     case mines
     case grenade(cards: Int, canJam: Bool)
     case concentrate(cards: Int, canJam: Bool)
@@ -78,15 +78,6 @@ final class ActionDeckEngine {
         return .failure
     }
 
-    func mines() -> AttemptResult {
-        let icons: [ActionCardIcon] = [.burst, .tripleBurst, .short]
-        let cards = discardAndDrawCards(3)
-        if cards.contains(where: { card in card.icons.contains { icons.contains($0) } }) {
-            return .success
-        }
-        return .failure
-    }
-
     func infiltration(count: Int) -> AttemptResult {
         let icons: [ActionCardIcon] = [.infiltrate]
         let cards = discardAndDrawCards(count)
@@ -103,9 +94,37 @@ final class ActionDeckEngine {
         }
         return .failure
     }
+
+    func spotting(count: Int) -> AttemptResult {
+        let icons: [ActionCardIcon] = [.crosshairs]
+        let cards = discardAndDrawCards(count)
+        if cards.contains(where: { card in card.icons.contains { icons.contains($0) } }) {
+            return .success
+        }
+        return .failure
+    }
+
+    func contact(count: Int) -> AttemptResult {
+        let icons: [ActionCardIcon] = [.contact]
+        let cards = discardAndDrawCards(count)
+        if cards.contains(where: { card in card.icons.contains { icons.contains($0) } }) {
+            return .success
+        }
+        return .failure
+    }
+
     func rally(count: Int) -> AttemptResult {
         let icons: [ActionCardIcon] = [.rally]
         let cards = discardAndDrawCards(count)
+        if cards.contains(where: { card in card.icons.contains { icons.contains($0) } }) {
+            return .success
+        }
+        return .failure
+    }
+
+    func mines() -> AttemptResult {
+        let icons: [ActionCardIcon] = [.burst, .tripleBurst, .short]
+        let cards = discardAndDrawCards(3)
         if cards.contains(where: { card in card.icons.contains { icons.contains($0) } }) {
             return .success
         }
