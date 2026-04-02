@@ -20,7 +20,7 @@ extension ActionCard {
         randomNumberTable[options - 2]
     }
 
-    func combatResult(for ncm: Int) -> CombatResult {
+    func combatResult(ncm: Int) -> CombatResult {
         let clampedNCM = min(max(ncm, -4), 6)
         return combatResults[clampedNCM + 4]
     }
