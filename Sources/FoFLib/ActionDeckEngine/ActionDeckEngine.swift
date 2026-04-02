@@ -12,7 +12,7 @@ enum AttempType {
     case activationCommands
     case initiativeCommands
     case atNumber
-    case combatResult
+    case combatResult(ncm: Int)
     case hitResult
     case hqEvent
     case infiltration(cards: Int)
@@ -65,6 +65,10 @@ final class ActionDeckEngine {
             return .success
         }
         return .failure
+    }
+    func combatResult(ncm: Int) -> CombatResult {
+        let cards = discardAndDrawCards(1)
+        return cards[0].combatResult(ncm: ncm)
     }
 
     func mines() -> AttemptResult {
