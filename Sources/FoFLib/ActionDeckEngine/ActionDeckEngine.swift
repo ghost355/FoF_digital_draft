@@ -80,44 +80,39 @@ final class ActionDeckEngine {
     }
 
     func infiltration(count: Int) -> AttemptResult {
-        let icons: [ActionCardIcon] = [.infiltrate]
         let cards = discardAndDrawCards(count)
-        if cards.contains(where: { card in card.icons.contains { icons.contains($0) } }) {
+        if cards.contains(where: { $0.icons.contains(.infiltrate) }) {
             return .success
         }
         return .failure
     }
     func cover(count: Int) -> AttemptResult {
-        let icons: [ActionCardIcon] = [.cover]
         let cards = discardAndDrawCards(count)
-        if cards.contains(where: { card in card.icons.contains { icons.contains($0) } }) {
+        if cards.contains(where: { $0.icons.contains(.cover) }) {
             return .success
         }
         return .failure
     }
 
     func spotting(count: Int) -> AttemptResult {
-        let icons: [ActionCardIcon] = [.crosshairs]
         let cards = discardAndDrawCards(count)
-        if cards.contains(where: { card in card.icons.contains { icons.contains($0) } }) {
+        if cards.contains(where: { $0.icons.contains(.crosshairs) }) {
             return .success
         }
         return .failure
     }
 
     func contact(count: Int) -> AttemptResult {
-        let icons: [ActionCardIcon] = [.contact]
         let cards = discardAndDrawCards(count)
-        if cards.contains(where: { card in card.icons.contains { icons.contains($0) } }) {
+        if cards.contains(where: { $0.icons.contains(.contact) }) {
             return .success
         }
         return .failure
     }
 
     func rally(count: Int) -> AttemptResult {
-        let icons: [ActionCardIcon] = [.rally]
         let cards = discardAndDrawCards(count)
-        if cards.contains(where: { card in card.icons.contains { icons.contains($0) } }) {
+        if cards.contains(where: { $0.icons.contains(.rally) }) {
             return .success
         }
         return .failure
