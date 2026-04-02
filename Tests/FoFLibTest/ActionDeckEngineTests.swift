@@ -276,4 +276,121 @@ final class ActionDeckEngineTests: XCTestCase {
         XCTAssertEqual(result, .miss)
     }
 
+    // MARK: - Grenade Tests
+
+    func testGrenade_anyCardHasGrenadeIcon_returnSuccess() {
+        let card1 = makeCard(icons: [.grenade, .cover])
+        let card2 = makeCard(icons: [.rally])
+        let card3 = makeCard(icons: [.hqEvent])
+        let engine = ActionDeckEngine(cards: [card1, card2, card3])
+        let result = engine.grenade(count: 3, canJammed: false)
+        XCTAssertEqual(result, .success)
+    }
+
+    // MARK: - Failure Tests
+
+    func testGrenade_noGrenadeIcon_noJamIcon_returnFailure() {
+        let card1 = makeCard(icons: [.cover])
+        let card2 = makeCard(icons: [.rally])
+        let card3 = makeCard(icons: [.hqEvent])
+        let engine = ActionDeckEngine(cards: [card1, card2, card3])
+        let result = engine.grenade(count: 3, canJammed: false)
+        XCTAssertEqual(result, .failure)
+    }
+
+    func testGrenade_noGrenadeIcon_hasJamIcon_canJammedFalse_returnFailure() {
+        let card1 = makeCard(icons: [.jam])
+        let card2 = makeCard(icons: [.rally])
+        let card3 = makeCard(icons: [.cover])
+        let engine = ActionDeckEngine(cards: [card1, card2, card3])
+        let result = engine.grenade(count: 3, canJammed: false)
+        XCTAssertEqual(result, .failure)
+    }
+
+    // MARK: - Jam Tests
+
+    func testGrenade_hasJamIcon_canJammedTrue_returnJam() {
+        let card1 = makeCard(icons: [.jam])
+        let card2 = makeCard(icons: [.grenade])
+        let card3 = makeCard(icons: [.cover])
+        let engine = ActionDeckEngine(cards: [card1, card2, card3])
+        let result = engine.grenade(count: 3, canJammed: true)
+        XCTAssertEqual(result, .jam)
+    }
+
+    func testGrenade_hasJamIcon_hasGrenadeIcon_canJammedTrue_returnJam() {
+        let card1 = makeCard(icons: [.jam, .grenade])
+        let card2 = makeCard(icons: [.rally])
+        let card3 = makeCard(icons: [.cover])
+        let engine = ActionDeckEngine(cards: [card1, card2, card3])
+        let result = engine.grenade(count: 3, canJammed: true)
+        XCTAssertEqual(result, .jam)
+    }
+
+    func testGrenade_hasJamIcon_canJammedFalse_returnSuccess() {
+        let card1 = makeCard(icons: [.jam])
+        let card2 = makeCard(icons: [.grenade])
+        let card3 = makeCard(icons: [.cover])
+        let engine = ActionDeckEngine(cards: [card1, card2, card3])
+        let result = engine.grenade(count: 3, canJammed: false)
+        XCTAssertEqual(result, .success)
+    }
+
+    // MARK: - Critical Hit Tests
+
+    func testGrenade_twoGrenadeIcons_returnCriticalHit() {
+        let card1 = makeCard(icons: [.grenade])
+        let card2 = makeCard(icons: [.grenade])
+        let card3 = makeCard(icons: [.cover])
+        let engine = ActionDeckEngine(cards: [card1, card2, card3])
+        let result = engine.grenade(count: 3, canJammed: false)
+        XCTAssertEqual(result, .criticalHit)
+    }
+
+    func testGrenade_threeGrenadeIcons_returnCriticalHit() {
+        let card1 = makeCard(icons: [.grenade])
+        let card2 = makeCard(icons: [.grenade])
+        let card3 = makeCard(icons: [.grenade])
+        let engine = ActionDeckEngine(cards: [card1, card2, card3])
+        let result = engine.grenade(count: 3, canJammed: false)
+        XCTAssertEqual(result, .criticalHit)
+    }
+
+    // MARK: - Critical Hit with Jam Priority
+
+    func testGrenade_twoGrenadeIcons_hasJamIcon_canJammedTrue_returnJam() {
+        let card1 = makeCard(icons: [.grenade])
+        let card2 = makeCard(icons: [.grenade])
+        let card3 = makeCard(icons: [.jam])
+        let engine = ActionDeckEngine(cards: [card1, card2, card3])
+        let result = engine.grenade(count: 3, canJammed: true)
+        XCTAssertEqual(result, .jam)  // Jam имеет приоритет над criticalHit
+    }
+
+    func testGrenade_twoGrenadeIcons_hasJamIcon_canJammedFalse_returnCriticalHit() {
+        let card1 = makeCard(icons: [.grenade])
+        let card2 = makeCard(icons: [.grenade])
+        let card3 = makeCard(icons: [.jam])
+        let engine = ActionDeckEngine(cards: [card1, card2, card3])
+        let result = engine.grenade(count: 3, canJammed: false)
+        XCTAssertEqual(result, .criticalHit)  // Jam игнорируется, считаем гранаты
+    }
+
+    // MARK: - Complex Combinations
+
+    func testGrenade_multipleIcons_oneGrenade_returnSuccess() {
+        let card1 = makeCard(icons: [.grenade, .jam, .cover])
+        let card2 = makeCard(icons: [.rally, .hqEvent])
+        let engine = ActionDeckEngine(cards: [card1, card2])
+        let result = engine.grenade(count: 2, canJammed: false)
+        XCTAssertEqual(result, .success)
+    }
+
+    func testGrenade_multipleIcons_twoGrenades_returnCriticalHit() {
+        let card1 = makeCard(icons: [.grenade, .jam])
+        let card2 = makeCard(icons: [.grenade, .cover])
+        let engine = ActionDeckEngine(cards: [card1, card2])
+        let result = engine.grenade(count: 2, canJammed: false)
+        XCTAssertEqual(result, .criticalHit)
+    }
 }
