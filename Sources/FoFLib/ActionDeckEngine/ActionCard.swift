@@ -25,6 +25,17 @@ extension ActionCard {
         return combatResults[clampedNCM + 4]
     }
 
+    func hitEffects(experience: ExperienceLevel) -> [HitEffect] {
+        switch experience {
+        case .veteran:
+            return hitEffects.veteran
+        case .line:
+            return hitEffects.line
+        case .green:
+            return hitEffects.green
+        }
+    }
+
     var isReshuffleCard: Bool { id == 51 }
 
 }
