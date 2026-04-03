@@ -16,15 +16,6 @@ extension ActionCard {
         icons.contains(icon)
     }
 
-    func randomNumber(for options: Int) -> Int {
-        randomNumberTable[options - 2]
-    }
-
-    func combatResult(ncm: Int) -> CombatResult {
-        let clampedNCM = min(max(ncm, -4), 6)
-        return combatResults[clampedNCM + 4]
-    }
-
     func hitEffects(experience: ExperienceLevel) -> [HitEffect] {
         switch experience {
         case .veteran:
