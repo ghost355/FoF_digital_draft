@@ -283,7 +283,7 @@ final class ActionDeckEngineTests: XCTestCase {
         let card2 = makeCard(icons: [.rally])
         let card3 = makeCard(icons: [.hqEvent])
         let engine = ActionDeckEngine(cards: [card1, card2, card3])
-        let result = engine.grenade(count: 3, canJammed: false)
+        let result = engine.grenadeAttack(count: 3, canJammed: false)
         XCTAssertEqual(result, .success)
     }
 
@@ -294,7 +294,7 @@ final class ActionDeckEngineTests: XCTestCase {
         let card2 = makeCard(icons: [.rally])
         let card3 = makeCard(icons: [.hqEvent])
         let engine = ActionDeckEngine(cards: [card1, card2, card3])
-        let result = engine.grenade(count: 3, canJammed: false)
+        let result = engine.grenadeAttack(count: 3, canJammed: false)
         XCTAssertEqual(result, .failure)
     }
 
@@ -303,7 +303,7 @@ final class ActionDeckEngineTests: XCTestCase {
         let card2 = makeCard(icons: [.rally])
         let card3 = makeCard(icons: [.cover])
         let engine = ActionDeckEngine(cards: [card1, card2, card3])
-        let result = engine.grenade(count: 3, canJammed: false)
+        let result = engine.grenadeAttack(count: 3, canJammed: false)
         XCTAssertEqual(result, .failure)
     }
 
@@ -314,7 +314,7 @@ final class ActionDeckEngineTests: XCTestCase {
         let card2 = makeCard(icons: [.grenade])
         let card3 = makeCard(icons: [.cover])
         let engine = ActionDeckEngine(cards: [card1, card2, card3])
-        let result = engine.grenade(count: 3, canJammed: true)
+        let result = engine.grenadeAttack(count: 3, canJammed: true)
         XCTAssertEqual(result, .jam)
     }
 
@@ -323,7 +323,7 @@ final class ActionDeckEngineTests: XCTestCase {
         let card2 = makeCard(icons: [.rally])
         let card3 = makeCard(icons: [.cover])
         let engine = ActionDeckEngine(cards: [card1, card2, card3])
-        let result = engine.grenade(count: 3, canJammed: true)
+        let result = engine.grenadeAttack(count: 3, canJammed: true)
         XCTAssertEqual(result, .jam)
     }
 
@@ -332,7 +332,7 @@ final class ActionDeckEngineTests: XCTestCase {
         let card2 = makeCard(icons: [.grenade])
         let card3 = makeCard(icons: [.cover])
         let engine = ActionDeckEngine(cards: [card1, card2, card3])
-        let result = engine.grenade(count: 3, canJammed: false)
+        let result = engine.grenadeAttack(count: 3, canJammed: false)
         XCTAssertEqual(result, .success)
     }
 
@@ -343,7 +343,7 @@ final class ActionDeckEngineTests: XCTestCase {
         let card2 = makeCard(icons: [.grenade])
         let card3 = makeCard(icons: [.cover])
         let engine = ActionDeckEngine(cards: [card1, card2, card3])
-        let result = engine.grenade(count: 3, canJammed: false)
+        let result = engine.grenadeAttack(count: 3, canJammed: false)
         XCTAssertEqual(result, .criticalHit)
     }
 
@@ -352,7 +352,7 @@ final class ActionDeckEngineTests: XCTestCase {
         let card2 = makeCard(icons: [.grenade])
         let card3 = makeCard(icons: [.grenade])
         let engine = ActionDeckEngine(cards: [card1, card2, card3])
-        let result = engine.grenade(count: 3, canJammed: false)
+        let result = engine.grenadeAttack(count: 3, canJammed: false)
         XCTAssertEqual(result, .criticalHit)
     }
 
@@ -363,7 +363,7 @@ final class ActionDeckEngineTests: XCTestCase {
         let card2 = makeCard(icons: [.grenade])
         let card3 = makeCard(icons: [.jam])
         let engine = ActionDeckEngine(cards: [card1, card2, card3])
-        let result = engine.grenade(count: 3, canJammed: true)
+        let result = engine.grenadeAttack(count: 3, canJammed: true)
         XCTAssertEqual(result, .jam)  // Jam имеет приоритет над criticalHit
     }
 
@@ -372,7 +372,7 @@ final class ActionDeckEngineTests: XCTestCase {
         let card2 = makeCard(icons: [.grenade])
         let card3 = makeCard(icons: [.jam])
         let engine = ActionDeckEngine(cards: [card1, card2, card3])
-        let result = engine.grenade(count: 3, canJammed: false)
+        let result = engine.grenadeAttack(count: 3, canJammed: false)
         XCTAssertEqual(result, .criticalHit)  // Jam игнорируется, считаем гранаты
     }
 
@@ -382,7 +382,7 @@ final class ActionDeckEngineTests: XCTestCase {
         let card1 = makeCard(icons: [.grenade, .jam, .cover])
         let card2 = makeCard(icons: [.rally, .hqEvent])
         let engine = ActionDeckEngine(cards: [card1, card2])
-        let result = engine.grenade(count: 2, canJammed: false)
+        let result = engine.grenadeAttack(count: 2, canJammed: false)
         XCTAssertEqual(result, .success)
     }
 
@@ -390,7 +390,7 @@ final class ActionDeckEngineTests: XCTestCase {
         let card1 = makeCard(icons: [.grenade, .jam])
         let card2 = makeCard(icons: [.grenade, .cover])
         let engine = ActionDeckEngine(cards: [card1, card2])
-        let result = engine.grenade(count: 2, canJammed: false)
+        let result = engine.grenadeAttack(count: 2, canJammed: false)
         XCTAssertEqual(result, .criticalHit)
     }
 }
