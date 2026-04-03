@@ -41,34 +41,42 @@ final class ActionDeckEngine {
     }
 
     func randomNumber(_ options: Int) -> Int {
-        let cards = discardAndDrawCards(1)
-        return cards[0].randomNumber(for: options)
+        let card = discardAndDrawCards(1)[0]
+        return card.randomNumberTable[options - 2]
 
     }
 
     func activatedCommands() -> Int {
-        let cards = discardAndDrawCards(1)
-        return cards[0].activatedCommands
+        let card = discardAndDrawCards(1)[0]
+        return card.activatedCommands
     }
 
     func initiativeCommands() -> Int {
-        let cards = discardAndDrawCards(1)
-        return cards[0].initiativeCommands
+        let card = discardAndDrawCards(1)[0]
+        return card.initiativeCommands
     }
 
     func atNumber() -> Int {
-        let cards = discardAndDrawCards(1)
-        return cards[0].atNumber
+        let card = discardAndDrawCards(1)[0]
+        return card.atNumber
     }
 
     func combatResult(ncm: Int) -> CombatResult {
-        let cards = discardAndDrawCards(1)
-        return cards[0].combatResult(ncm: ncm)
+        let card = discardAndDrawCards(1)[0]
+        let clampedNCM = min(max(ncm, -4), 6)
+        return card.combatResults[clampedNCM + 4]
     }
 
     func hitEffect(experience: ExperienceLevel) -> [HitEffect] {
-        let cards = discardAndDrawCards(1)
-        return cards[0].hitEffects(experience: experience)
+        let card = discardAndDrawCards(1)[0]
+        switch experience {
+        case .veteran:
+            return card.hitEffects.veteran
+        case .line:
+            return card.hitEffects.line
+        case .green:
+            return card.hitEffects.green
+        }
     }
 
     func hqEvent() -> AttemptResult {
