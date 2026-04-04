@@ -418,11 +418,11 @@ final class ActionDeckEngineTests: XCTestCase {
         XCTAssertEqual(result, .bnFireMisson)
     }
 
-    func testCallForFire_hasBnFireMissionButNoTripleBurst_returnFailure() {
+    func testCallForFire_hasBnFireMissionAndBurst_returnSuccess() {
         let card = makeCard(icons: [.burst])
         let engine = ActionDeckEngine(cards: [card])
         let result = engine.callForFire(count: 1, hasBnFireMission: true)
-        XCTAssertEqual(result, .failure)
+        XCTAssertEqual(result, .success)
     }
 
     func testCallForFire_cardHasBurstIcon_returnSuccess() {
