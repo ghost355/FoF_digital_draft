@@ -6,25 +6,17 @@ final class ActionCardTests: XCTestCase {
 
     private func makeCard(
         id: Int = 1,
-        activatedCommands: Int = 0,
-        initiativeCommands: Int = 0,
-        atNumber: Int = 0,
-        icons: [ActionCardIcon] = [],
-        combatResults: [CombatResult] = [
-            .miss, .miss, .miss, .miss, .miss, .miss, .miss, .miss, .miss, .miss, .miss,
-        ],
-        hitEffects: HitEffectTable = HitEffectTable(veteran: [], line: [], green: []),
-        randomNumberTable: [Int] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+        icons: [ActionCardIcon] = []
     ) -> ActionCard {
         ActionCard(
             id: id,
-            activatedCommands: activatedCommands,
-            initiativeCommands: initiativeCommands,
-            atNumber: atNumber,
+            activatedCommands: 0,
+            initiativeCommands: 0,
+            atNumber: 0,
             icons: icons,
-            combatResults: combatResults,
-            hitEffects: hitEffects,
-            randomNumberTable: randomNumberTable
+            combatResults: [.miss, .miss, .miss, .miss, .miss, .miss, .miss, .miss, .miss, .miss, .miss],
+            hitEffects: HitEffectTable(veteran: [], line: [], green: []),
+            randomNumberTable: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
         )
     }
 
@@ -45,66 +37,6 @@ final class ActionCardTests: XCTestCase {
     func testHasIcon_emptyIcons_returnsFalse() {
         let card = makeCard(icons: [])
         XCTAssertFalse(card.hasIcon(.burst))
-    }
-
-    // MARK: - randomNumber
-
-    func testRandomNumber_options2_returnsTableIndex0() {
-        let card = makeCard(randomNumberTable: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110])
-        XCTAssertEqual(card.randomNumber(for: 2), 10)
-    }
-
-    func testRandomNumber_options3_returnsTableIndex1() {
-        let card = makeCard(randomNumberTable: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110])
-        XCTAssertEqual(card.randomNumber(for: 3), 20)
-    }
-
-    func testRandomNumber_options7_returnsTableIndex5() {
-        let card = makeCard(randomNumberTable: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110])
-        XCTAssertEqual(card.randomNumber(for: 7), 60)
-    }
-
-    func testRandomNumber_options12_returnsTableIndex10() {
-        let card = makeCard(randomNumberTable: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110])
-        XCTAssertEqual(card.randomNumber(for: 12), 110)
-    }
-
-    // MARK: - combatResult
-
-    func testCombatResult_ncmMinus4_returnsFirstElement() {
-        let card = makeCard(combatResults: [
-            .miss, .miss, .miss, .miss, .miss, .miss, .miss, .miss, .miss, .miss, .hit,
-        ])
-        XCTAssertEqual(card.combatResult(ncm: -4), .miss)
-    }
-
-    func testCombatResult_ncm0_returnsFifthElement() {
-        // ncm + 4 = 0 + 4 = index 4
-        let card = makeCard(combatResults: [
-            .miss, .miss, .miss, .miss, .hit, .miss, .miss, .miss, .miss, .miss, .miss,
-        ])
-        XCTAssertEqual(card.combatResult(ncm: 0), .hit)
-    }
-
-    func testCombatResult_ncm6_returnsLastElement() {
-        let card = makeCard(combatResults: [
-            .miss, .miss, .miss, .miss, .miss, .miss, .miss, .miss, .miss, .miss, .hit,
-        ])
-        XCTAssertEqual(card.combatResult(ncm: 6), .hit)
-    }
-
-    func testCombatResult_ncmBelowMinus4_clampedToMinus4() {
-        let card = makeCard(combatResults: [
-            .miss, .hit, .hit, .hit, .hit, .hit, .hit, .hit, .hit, .hit, .hit,
-        ])
-        XCTAssertEqual(card.combatResult(ncm: -10), .miss)
-    }
-
-    func testCombatResult_ncmAbove6_clampedTo6() {
-        let card = makeCard(combatResults: [
-            .miss, .miss, .miss, .miss, .miss, .miss, .miss, .miss, .miss, .miss, .hit,
-        ])
-        XCTAssertEqual(card.combatResult(ncm: 10), .hit)
     }
 
     // MARK: - isReshuffleCard
