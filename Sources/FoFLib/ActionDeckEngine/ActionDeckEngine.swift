@@ -13,7 +13,7 @@ enum AttempType {
     case initiativeCommands
     case atNumber
     case combatResult(ncm: Int)
-    case hitEffect
+    case hitEffect(experience: ExperienceLevel)
     case hqEvent
     case infiltration(cards: Int)
     case cover(cards: Int)
@@ -90,6 +90,7 @@ final class ActionDeckEngine {
         let hasInfiltration = cards.contains { $0.icons.contains(.infiltrate) }
         return hasInfiltration ? .success : .failure
     }
+
     func cover(count: Int) -> AttemptResult {
         let cards = discardAndDrawCards(count)
         let hasCover = cards.contains { $0.icons.contains(.cover) }
@@ -139,6 +140,7 @@ final class ActionDeckEngine {
             return .criticalHit
         }
     }
+
     func concentrateFire(count: Int, canJammed: Bool) -> AttemptResult {
         let cards = discardAndDrawCards(count)
 
