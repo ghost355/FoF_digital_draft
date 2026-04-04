@@ -4,11 +4,11 @@
 
 | Файл | Тестов | Описание |
 |------|--------|----------|
-| `ActionCardTests.swift` | 15 | Тесты структуры `ActionCard` |
-| `ActionDeckEngineTests.swift` | 25 | Тесты методов `ActionDeckEngine` |
-| `ActionDeckTests.swift` | 13 | Тесты логики `ActionDeck` |
+| `ActionCardTests.swift` | 6 | Тесты структуры `ActionCard` |
+| `ActionDeckEngineTests.swift` | 51 | Тесты методов `ActionDeckEngine` |
+| `ActionDeckTests.swift` | 12 | Тесты логики `ActionDeck` |
 | `JSONLoaderTests.swift` | 3 | Тесты загрузки JSON |
-| **Итого** | **56** | |
+| **Итого** | **72** | |
 
 ---
 
@@ -21,25 +21,6 @@
 | `testHasIcon_cardContainsIcon_returnsTrue` | Карта содержит иконку → возвращает `true` |
 | `testHasIcon_cardDoesNotContainIcon_returnsFalse` | Карта не содержит иконку → возвращает `false` |
 | `testHasIcon_emptyIcons_returnsFalse` | Пустой массив иконок → возвращает `false` |
-
-### randomNumber
-
-| Тест | Описание |
-|------|----------|
-| `testRandomNumber_options2_returnsTableIndex0` | options=2 → table[0] |
-| `testRandomNumber_options3_returnsTableIndex1` | options=3 → table[1] |
-| `testRandomNumber_options7_returnsTableIndex5` | options=7 → table[5] |
-| `testRandomNumber_options12_returnsTableIndex10` | options=12 → table[10] |
-
-### combatResult
-
-| Тест | Описание |
-|------|----------|
-| `testCombatResult_ncmMinus4_returnsFirstElement` | NCM=-4 → первый элемент (index 0) |
-| `testCombatResult_ncm0_returnsFifthElement` | NCM=0 → пятый элемент (index 4) |
-| `testCombatResult_ncm6_returnsLastElement` | NCM=6 → последний элемент (index 10) |
-| `testCombatResult_ncmBelowMinus4_clampedToMinus4` | NCM=-10 → clamped до -4 |
-| `testCombatResult_ncmAbove6_clampedTo6` | NCM=10 → clamped до 6 |
 
 ### isReshuffleCard
 
@@ -103,6 +84,47 @@
 | `testRally_multipleCards_rallyAtFirstPosition_returnSuccess` | 3 карты, `rally` первая → `.success` |
 | `testRally_multipleCards_rallyAtLastPosition_returnSuccess` | 3 карты, `rally` последняя → `.success` |
 
+### combatResult
+
+| Тест | Описание |
+|------|----------|
+| `testCombatResult_ncmMinus4_returnsIndex0` | NCM=-4 → index 0 |
+| `testCombatResult_ncm0_returnsIndex4` | NCM=0 → index 4 |
+| `testCombatResult_ncm6_returnsLastElement` | NCM=6 → последний элемент |
+| `testCombatResult_ncmBelowMinus4_clampedToMinus4` | NCM=-10 → clamped до -4 |
+| `testCombatResult_ncmAbove6_clampedTo6` | NCM=10 → clamped до 6 |
+
+### grenadeAttack
+
+| Тест | Описание |
+|------|----------|
+| `testGrenade_anyCardHasGrenadeIcon_returnSuccess` | Есть `grenade` → `.success` |
+| `testGrenade_noGrenadeIcon_noJamIcon_returnFailure` | Нет `grenade`, нет `jam` → `.failure` |
+| `testGrenade_noGrenadeIcon_hasJamIcon_canJammedFalse_returnFailure` | Нет `grenade`, есть `jam`, canJammed=false → `.failure` |
+| `testGrenade_hasJamIcon_canJammedTrue_returnJam` | Есть `jam`, canJammed=true → `.jam` |
+| `testGrenade_hasJamIcon_hasGrenadeIcon_canJammedTrue_returnJam` | Есть `jam` и `grenade`, canJammed=true → `.jam` |
+| `testGrenade_hasJamIcon_canJammedFalse_returnSuccess` | Есть `jam`, canJammed=false → `.success` |
+| `testGrenade_twoGrenadeIcons_returnCriticalHit` | 2 `grenade` → `.criticalHit` |
+| `testGrenade_threeGrenadeIcons_returnCriticalHit` | 3 `grenade` → `.criticalHit` |
+| `testGrenade_twoGrenadeIcons_hasJamIcon_canJammedTrue_returnJam` | jam приоритетнее criticalHit |
+| `testGrenade_twoGrenadeIcons_hasJamIcon_canJammedFalse_returnCriticalHit` | jam игнорируется при canJammed=false |
+| `testGrenade_multipleIcons_oneGrenade_returnSuccess` | Комбинированные иконки, 1 grenade → `.success` |
+| `testGrenade_multipleIcons_twoGrenades_returnCriticalHit` | Комбинированные иконки, 2 grenade → `.criticalHit` |
+
+### callForFire
+
+| Тест | Описание |
+|------|----------|
+| `testCallForFire_cardHasShortIcon_returnShort` | `short` → `.short` (наивысший приоритет) |
+| `testCallForFire_cardHasShortIcon_tripleBurstAndBnFireMission_returnShort` | `short` приоритетнее bnFireMission |
+| `testCallForFire_hasBnFireMissionAndTripleBurst_returnBnFireMission` | bnFireMission + tripleBurst → `.bnFireMisson` |
+| `testCallForFire_hasBnFireMissionButNoTripleBurst_returnFailure` | bnFireMission без tripleBurst → `.failure` |
+| `testCallForFire_cardHasBurstIcon_returnSuccess` | `burst` → `.success` |
+| `testCallForFire_cardHasTripleBurstIcon_returnSuccess` | `tripleBurst` → `.success` |
+| `testCallForFire_noRelevantIcons_returnFailure` | Нет нужных иконок → `.failure` |
+| `testCallForFire_multipleCards_oneHasBurstIcon_returnSuccess` | Несколько карт, одна с `burst` → `.success` |
+| `testCallForFire_multipleCards_oneHasTripleBurstIcon_returnSuccess` | Несколько карт, одна с `tripleBurst` → `.success` |
+
 ---
 
 ## ActionDeckTests.swift
@@ -138,12 +160,6 @@
 |------|----------|
 | `testTotalCount_equalsDrawDeckPlusDiscardPile` | totalCount = drawDeck + discardPile |
 | `testDrawDeckCount_decreasesOnDraw` | draw уменьшает drawDeckCount |
-
-### reshuffle
-
-| Тест | Описание |
-|------|----------|
-| `testReshuffle_reshuffleCardInsertedInFirstHalfOfDeck` | Карта reshuffle вставляется в первую половину колоды |
 
 ---
 
