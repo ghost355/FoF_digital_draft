@@ -393,4 +393,76 @@ final class ActionDeckEngineTests: XCTestCase {
         let result = engine.grenadeAttack(count: 2, canJammed: false)
         XCTAssertEqual(result, .criticalHit)
     }
+
+    // MARK: - callForFire
+
+    func testCallForFire_cardHasShortIcon_returnShort() {
+        let card = makeCard(icons: [.short])
+        let engine = ActionDeckEngine(cards: [card])
+        let result = engine.callForFire(count: 1, hasBnFireMission: true)
+        XCTAssertEqual(result, .short)
+    }
+
+    func testCallForFire_cardHasShortIcon_tripleBurstAndBnFireMission_returnShort() {
+        let card1 = makeCard(icons: [.short])
+        let card2 = makeCard(icons: [.tripleBurst])
+        let engine = ActionDeckEngine(cards: [card1, card2])
+        let result = engine.callForFire(count: 2, hasBnFireMission: true)
+        XCTAssertEqual(result, .short)
+    }
+
+    func testCallForFire_hasBnFireMissionAndTripleBurst_returnBnFireMission() {
+        let card = makeCard(icons: [.tripleBurst])
+        let engine = ActionDeckEngine(cards: [card])
+        let result = engine.callForFire(count: 1, hasBnFireMission: true)
+        XCTAssertEqual(result, .bnFireMisson)
+    }
+
+    func testCallForFire_hasBnFireMissionButNoTripleBurst_returnFailure() {
+        let card = makeCard(icons: [.burst])
+        let engine = ActionDeckEngine(cards: [card])
+        let result = engine.callForFire(count: 1, hasBnFireMission: true)
+        XCTAssertEqual(result, .failure)
+    }
+
+    func testCallForFire_cardHasBurstIcon_returnSuccess() {
+        let card = makeCard(icons: [.burst])
+        let engine = ActionDeckEngine(cards: [card])
+        let result = engine.callForFire(count: 1, hasBnFireMission: false)
+        XCTAssertEqual(result, .success)
+    }
+
+    func testCallForFire_cardHasTripleBurstIcon_returnSuccess() {
+        let card = makeCard(icons: [.tripleBurst])
+        let engine = ActionDeckEngine(cards: [card])
+        let result = engine.callForFire(count: 1, hasBnFireMission: false)
+        XCTAssertEqual(result, .success)
+    }
+
+    func testCallForFire_noRelevantIcons_returnFailure() {
+        let card1 = makeCard(icons: [.contact])
+        let card2 = makeCard(icons: [.cover])
+        let card3 = makeCard(icons: [.rally])
+        let engine = ActionDeckEngine(cards: [card1, card2, card3])
+        let result = engine.callForFire(count: 3, hasBnFireMission: false)
+        XCTAssertEqual(result, .failure)
+    }
+
+    func testCallForFire_multipleCards_oneHasBurstIcon_returnSuccess() {
+        let card1 = makeCard(icons: [.contact])
+        let card2 = makeCard(icons: [.burst])
+        let card3 = makeCard(icons: [.jam])
+        let engine = ActionDeckEngine(cards: [card1, card2, card3])
+        let result = engine.callForFire(count: 3, hasBnFireMission: false)
+        XCTAssertEqual(result, .success)
+    }
+
+    func testCallForFire_multipleCards_oneHasTripleBurstIcon_returnSuccess() {
+        let card1 = makeCard(icons: [.contact])
+        let card2 = makeCard(icons: [.tripleBurst])
+        let card3 = makeCard(icons: [.jam])
+        let engine = ActionDeckEngine(cards: [card1, card2, card3])
+        let result = engine.callForFire(count: 3, hasBnFireMission: false)
+        XCTAssertEqual(result, .success)
+    }
 }
