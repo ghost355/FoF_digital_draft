@@ -81,43 +81,43 @@ final class ActionDeckEngine {
 
     func hqEvent() -> AttemptResult {
         let cards = discardAndDrawCards(1)
-        let hasHqEvent = cards.contains(where: { $0.icons.contains(.hqEvent) })
+        let hasHqEvent = cards.contains { $0.icons.contains(.hqEvent) }
         return hasHqEvent ? .success : .failure
     }
 
     func infiltration(count: Int) -> AttemptResult {
         let cards = discardAndDrawCards(count)
-        let hasInfiltration = cards.contains(where: { $0.icons.contains(.infiltrate) })
+        let hasInfiltration = cards.contains { $0.icons.contains(.infiltrate) }
         return hasInfiltration ? .success : .failure
     }
     func cover(count: Int) -> AttemptResult {
         let cards = discardAndDrawCards(count)
-        let hasCover = cards.contains(where: { $0.icons.contains(.cover) })
+        let hasCover = cards.contains { $0.icons.contains(.cover) }
         return hasCover ? .success : .failure
     }
 
     func spotting(count: Int) -> AttemptResult {
         let cards = discardAndDrawCards(count)
-        let hasCrosshairs = cards.contains(where: { $0.icons.contains(.crosshairs) })
+        let hasCrosshairs = cards.contains { $0.icons.contains(.crosshairs) }
         return hasCrosshairs ? .success : .failure
     }
 
     func contact(count: Int) -> AttemptResult {
         let cards = discardAndDrawCards(count)
-        let hasContact = cards.contains(where: { $0.icons.contains(.contact) })
+        let hasContact = cards.contains { $0.icons.contains(.contact) }
         return hasContact ? .success : .failure
     }
 
     func rally(count: Int) -> AttemptResult {
         let cards = discardAndDrawCards(count)
-        let hasRally = cards.contains(where: { $0.icons.contains(.rally) })
+        let hasRally = cards.contains { $0.icons.contains(.rally) }
         return hasRally ? .success : .failure
     }
 
     func mines() -> AttemptResult {
         let icons: [ActionCardIcon] = [.burst, .tripleBurst, .short]
         let cards = discardAndDrawCards(3)
-        let hasMine = cards.contains(where: { card in card.icons.contains { icons.contains($0) } })
+        let hasMine = cards.contains { $0.icons.contains { icons.contains($0) } }
         return hasMine ? .success : .failure
     }
 
