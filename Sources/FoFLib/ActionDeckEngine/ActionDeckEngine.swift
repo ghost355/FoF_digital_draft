@@ -1,6 +1,7 @@
 // ActionDeckEngine.swift
 
-enum AttemptResult {
+enum AttemptResult: String {
+
     case success, failure
     case jam, short, mines
     case criticalHit, bnFireMisson
