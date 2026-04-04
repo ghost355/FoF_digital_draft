@@ -157,4 +157,20 @@ final class ActionDeckEngine {
             return .criticalHit
         }
     }
+
+    func callForFire(count: Int, hasBnFireMission: Bool) -> AttemptResult {
+        let cards = discardAndDrawCards(count)
+
+        let hasShort = cards.contains { $0.icons.contains(.short) }
+        let hasTripleBurst = cards.contains { $0.icons.contains(.tripleBurst) }
+        let hasBurst = cards.contains { $0.icons.contains(.burst) }
+
+        if hasShort {
+            return .short
+        }
+        if hasBnFireMission && hasTripleBurst {
+            return .bnFireMisson
+        }
+        return hasBurst || hasTripleBurst ? .success : .failure
+    }
 }
