@@ -118,7 +118,7 @@
 | `testCallForFire_cardHasShortIcon_returnShort` | `short` → `.short` (наивысший приоритет) |
 | `testCallForFire_cardHasShortIcon_tripleBurstAndBnFireMission_returnShort` | `short` приоритетнее bnFireMission |
 | `testCallForFire_hasBnFireMissionAndTripleBurst_returnBnFireMission` | bnFireMission + tripleBurst → `.bnFireMisson` |
-| `testCallForFire_hasBnFireMissionButNoTripleBurst_returnFailure` | bnFireMission без tripleBurst → `.failure` |
+| `testCallForFire_hasBnFireMissionAndBurst_returnSuccess` | bnFireMission с burst → `.success` |
 | `testCallForFire_cardHasBurstIcon_returnSuccess` | `burst` → `.success` |
 | `testCallForFire_cardHasTripleBurstIcon_returnSuccess` | `tripleBurst` → `.success` |
 | `testCallForFire_noRelevantIcons_returnFailure` | Нет нужных иконок → `.failure` |
