@@ -15,7 +15,7 @@ public final class TestActionDeckEngine: @unchecked Sendable {
         guard let card = cards.first(where: { $0.id == id }) else {
             return "Card not found"
         }
-        
+
         let random = card.randomNumberTable.enumerated().map { index, value in
             "\(index + 2)/\(value)"
         }.joined(separator: ", ")
@@ -68,96 +68,73 @@ public final class TestActionDeckEngine: @unchecked Sendable {
         engine.randomNumber(option)
     }
 
-    // MARK: - Check Methods (return String?)
+    // MARK: - Check Methods (return String)
 
-    private func resultToString(_ result: AttemptResult) -> String {
-        switch result {
-        case .success: return "success"
-        case .failure: return "failure"
-        case .jam: return "jam"
-        case .short: return "short"
-        case .mines: return "mines"
-        case .criticalHit: return "criticalHit"
-        case .bnFireMisson: return "bnFireMisson"
-        }
-    }
-
-    public func checkInfiltration(count: Int) -> String? {
+    public func infiltration(count: Int) -> String {
         let result: AttemptResult = engine.infiltration(count: count)
-        return resultToString(result)
+        return result.rawValue
     }
 
-    public func infiltration(count: Int) -> String? {
-        return checkInfiltration(count: count)
-    }
-
-    public func cover(count: Int) -> String? {
+    public func cover(count: Int) -> String {
         let result: AttemptResult = engine.cover(count: count)
-        return resultToString(result)
+        return result.rawValue
     }
 
-    public func rally(count: Int) -> String? {
+    public func rally(count: Int) -> String {
         let result: AttemptResult = engine.rally(count: count)
-        return resultToString(result)
+        return result.rawValue
     }
 
-    public func spotting(count: Int) -> String? {
+    public func spotting(count: Int) -> String {
         let result: AttemptResult = engine.spotting(count: count)
-        return resultToString(result)
+        return result.rawValue
     }
 
-    public func contact(count: Int) -> String? {
+    public func contact(count: Int) -> String {
         let result: AttemptResult = engine.contact(count: count)
-        return resultToString(result)
+        return result.rawValue
     }
 
-    public func hqEvent() -> String? {
+    public func hqEvent() -> String {
         let result: AttemptResult = engine.hqEvent()
-        return resultToString(result)
+        return result.rawValue
     }
 
-    public func mines() -> String? {
+    public func mines() -> String {
         let result: AttemptResult = engine.mines()
-        return resultToString(result)
+        return result.rawValue
     }
 
-    public func grenadeAttack(count: Int, canJam: Bool) -> String? {
+    public func grenadeAttack(count: Int, canJam: Bool) -> String {
         let result: AttemptResult = engine.grenadeAttack(count: count, canJammed: canJam)
-        return resultToString(result)
+        return result.rawValue
     }
 
-    public func concentrateFire(count: Int, canJam: Bool) -> String? {
+    public func concentrateFire(count: Int, canJam: Bool) -> String {
         let result: AttemptResult = engine.concentrateFire(count: count, canJammed: canJam)
-        return resultToString(result)
+        return result.rawValue
     }
 
-    public func callForFire(count: Int, hasBnFireMission: Bool) -> String? {
-        let result: AttemptResult = engine.callForFire(count: count, hasBnFireMission: hasBnFireMission)
-        return resultToString(result)
+    public func callForFire(count: Int, hasBnFireMission: Bool) -> String {
+        let result: AttemptResult = engine.callForFire(
+            count: count, hasBnFireMission: hasBnFireMission)
+        return result.rawValue
     }
 
     // MARK: - Combat Methods
 
-    private func combatResultToString(_ result: CombatResult) -> String {
-        switch result {
-        case .hit: return "hit"
-        case .pin: return "pin"
-        case .miss: return "miss"
-        }
-    }
-
-    public func combatResult(ncm: Int) -> String? {
+    public func combatResult(ncm: Int) -> String {
         let result = engine.combatResult(ncm: ncm)
-        return combatResultToString(result)
+        return result.rawValue
     }
 
-    public func hitEffect(experience: String) -> String? {
+    public func hitEffect(experience: String) -> String {
         let exp: ExperienceLevel
         switch experience.lowercased() {
         case "veteran", "vet", "v": exp = .veteran
         case "line", "l": exp = .line
         case "green", "g": exp = .green
-        default: return nil
+        default: return "none"
         }
         let effects = engine.hitEffect(experience: exp)
         return effects.map { $0.rawValue }.joined(separator: ", ")
