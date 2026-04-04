@@ -8,7 +8,8 @@
 | `ActionDeckEngineTests.swift` | 51 | Тесты методов `ActionDeckEngine` |
 | `ActionDeckTests.swift` | 12 | Тесты логики `ActionDeck` |
 | `JSONLoaderTests.swift` | 3 | Тесты загрузки JSON |
-| **Итого** | **72** | |
+| `IntegrationTests.swift` | 11 | Интеграционные тесты на реальной колоде |
+| **Итого** | **83** | |
 
 ---
 
@@ -172,6 +173,38 @@
 | `testLoadJSON_validFile_returnsDecodedData` | Загрузка JSON возвращает массив карт |
 | `testLoadJSON_validFile_decodesAllCardFields` | Все поля карты декодируются корректно |
 | `testLoadJSON_reshuffleCardExists` | В JSON существует карта reshuffle (id=51) |
+
+---
+
+## IntegrationTests.swift
+
+Интеграционные тесты на реальной колоде (50 карт).
+
+### Real Deck Behavior
+
+| Тест | Описание |
+|------|----------|
+| `testRealDeck_combatResult_returnsValidResults` | combatResult возвращает валидные результаты |
+| `testRealDeck_randomNumber_returnsValue` | randomNumber возвращает значение из таблицы |
+| `testRealDeck_initialDeckHasCards` | Начальная колода содержит карты |
+| `testRealDeck_drawDecreasesDeck` | draw уменьшает размер колоды |
+
+### Functions Return Valid Results
+
+| Тест | Описание |
+|------|----------|
+| `testRealDeck_hqEvent_returnsValidResult` | hqEvent возвращает .success или .failure |
+| `testRealDeck_infiltration_returnsValidResult` | infiltration возвращает .success или .failure |
+| `testRealDeck_cover_returnsValidResult` | cover возвращает .success или .failure |
+| `testRealDeck_rally_returnsValidResult` | rally возвращает .success или .failure |
+| `testRealDeck_callForFire_returnsValidResult` | callForFire возвращает валидный результат |
+| `testRealDeck_grenadeAttack_returnsValidResult` | grenadeAttack возвращает валидный результат |
+
+### Hit Effects
+
+| Тест | Описание |
+|------|----------|
+| `testRealDeck_hitEffect_allExperienceLevels` | hitEffect работает для всех уровней опыта |
 
 ---
 
