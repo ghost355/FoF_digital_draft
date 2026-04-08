@@ -465,4 +465,117 @@ final class ActionDeckEngineTests: XCTestCase {
         let result = engine.callForFire(count: 3, hasBnFireMission: false)
         XCTAssertEqual(result, .success)
     }
+
+    // MARK: - exhort
+
+    func testExhort_noPreviousFailure_returnsNil() {
+        let card = makeCard(icons: [.cover])
+        let engine = ActionDeckEngine(cards: [card])
+        XCTAssertNil(engine.exhort())
+    }
+
+    func testExhort_afterSuccessfulInfiltration_returnsNil() {
+        let card = makeCard(icons: [.infiltrate])
+        let engine = ActionDeckEngine(cards: [card, card, card])
+        _ = engine.infiltration(count: 1)
+        XCTAssertNil(engine.exhort())
+    }
+
+    func testExhort_afterFailedInfiltration_drawsOneCard() {
+        let card1 = makeCard(icons: [.cover])
+        let card2 = makeCard(icons: [.infiltrate])
+        let engine = ActionDeckEngine(cards: [card1, card2, card1, card2])
+        let handBefore = engine.deck.handCount
+        _ = engine.infiltration(count: 1)
+        _ = engine.exhort()
+        XCTAssertEqual(engine.deck.handCount, handBefore + 1)
+    }
+
+    func testExhort_canOnlyBeUsedOnce() {
+        let failCard = makeCard(icons: [.cover])
+        let successCard = makeCard(icons: [.infiltrate])
+        let engine = ActionDeckEngine(cards: [failCard, successCard, successCard, successCard])
+        _ = engine.infiltration(count: 1)
+        _ = engine.exhort()
+        XCTAssertNil(engine.exhort())
+    }
+
+    func testExhort_afterFailedCover_drawsOneCard() {
+        let failCard = makeCard(icons: [.rally])
+        let engine = ActionDeckEngine(cards: Array(repeating: failCard, count: 10))
+        let handBefore = engine.deck.handCount
+        _ = engine.cover(count: 1)
+        _ = engine.exhort()
+        XCTAssertEqual(engine.deck.handCount, handBefore + 1)
+    }
+
+    func testExhort_afterFailedSpotting_drawsOneCard() {
+        let failCard = makeCard(icons: [.rally])
+        let engine = ActionDeckEngine(cards: Array(repeating: failCard, count: 10))
+        let handBefore = engine.deck.handCount
+        _ = engine.spotting(count: 1)
+        _ = engine.exhort()
+        XCTAssertEqual(engine.deck.handCount, handBefore + 1)
+    }
+
+    func testExhort_afterFailedContact_drawsOneCard() {
+        let failCard = makeCard(icons: [.rally])
+        let engine = ActionDeckEngine(cards: Array(repeating: failCard, count: 10))
+        let handBefore = engine.deck.handCount
+        _ = engine.contact(count: 1)
+        _ = engine.exhort()
+        XCTAssertEqual(engine.deck.handCount, handBefore + 1)
+    }
+
+    func testExhort_afterFailedRally_drawsOneCard() {
+        let failCard = makeCard(icons: [.cover])
+        let engine = ActionDeckEngine(cards: [failCard, failCard, failCard, failCard])
+        let handBefore = engine.deck.handCount
+        _ = engine.rally(count: 1)
+        _ = engine.exhort()
+        XCTAssertEqual(engine.deck.handCount, handBefore + 1)
+    }
+
+    func testExhort_afterFailedGrenade_drawsOneCard() {
+        let failCard = makeCard(icons: [.burst])
+        let engine = ActionDeckEngine(cards: Array(repeating: failCard, count: 10))
+        let handBefore = engine.deck.handCount
+        _ = engine.grenadeAttack(count: 1, canJammed: false)
+        _ = engine.exhort()
+        XCTAssertEqual(engine.deck.handCount, handBefore + 1)
+    }
+
+    func testExhort_afterJam_cannotBeUsed() {
+        let jamCard = makeCard(icons: [.jam])
+        let engine = ActionDeckEngine(cards: [jamCard, jamCard, jamCard])
+        _ = engine.grenadeAttack(count: 1, canJammed: true)
+        XCTAssertNil(engine.exhort())
+    }
+
+    func testExhort_afterFailedConcentrateFire_drawsOneCard() {
+        let failCard = makeCard(icons: [.burst])
+        let engine = ActionDeckEngine(cards: Array(repeating: failCard, count: 10))
+        let handBefore = engine.deck.handCount
+        _ = engine.concentrateFire(count: 1, canJammed: false)
+        _ = engine.exhort()
+        XCTAssertEqual(engine.deck.handCount, handBefore + 1)
+    }
+
+    func testExhort_afterFailedCallForFire_drawsOneCard() {
+        let failCard = makeCard(icons: [.contact])
+        let engine = ActionDeckEngine(cards: Array(repeating: failCard, count: 10))
+        let handBefore = engine.deck.handCount
+        _ = engine.callForFire(count: 1, hasBnFireMission: false)
+        _ = engine.exhort()
+        XCTAssertEqual(engine.deck.handCount, handBefore + 1)
+    }
+
+    func testExhort_multipleFailsOnlyFirstAttemptSaved() {
+        let failCard = makeCard(icons: [.cover])
+        let engine = ActionDeckEngine(cards: Array(repeating: failCard, count: 20))
+        _ = engine.infiltration(count: 1)
+        _ = engine.infiltration(count: 1)
+        _ = engine.exhort()
+        XCTAssertNil(engine.exhort())
+    }
 }
