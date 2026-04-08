@@ -145,7 +145,7 @@ mainLoop: while true {
 
     // === Бой ===
     case "5":
-        guard let ncm = getIntInput(prompt: "NCM (-4 to +6):", min: -4, max: 6, zeroValid: true)
+        guard let ncm = getIntInput(prompt: "NCM (-4 to +6):", min: -20, max: 20, zeroValid: true)
         else { continue }
         let result = engine.combatResult(ncm: ncm)
         let isSuccess = result == "hit" || result == "pin"
