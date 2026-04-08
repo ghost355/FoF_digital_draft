@@ -160,6 +160,6 @@ public final class TestActionDeckEngine: @unchecked Sendable {
         default: return "none"
         }
         let effects = engine.hitEffect(experience: exp)
-        return effects.map { $0.rawValue }.joined(separator: ", ")
+        return effects.map { $0.rawValue }.joined(separator: "")
     }
 }
