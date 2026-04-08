@@ -79,6 +79,18 @@ public final class TestActionDeckEngine: @unchecked Sendable {
         engine.randomNumber(option)
     }
 
+    public func activatedCommands() -> Int {
+        engine.activatedCommands()
+    }
+
+    public func initiativeCommands() -> Int {
+        engine.initiativeCommands()
+    }
+
+    public func atNumber() -> Int {
+        engine.atNumber()
+    }
+
     // MARK: - Check Methods (return String)
 
     public func infiltration(count: Int) -> String {
