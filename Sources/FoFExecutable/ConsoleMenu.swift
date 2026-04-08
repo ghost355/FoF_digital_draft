@@ -44,6 +44,9 @@ func showMainMenu() {
     print("[\(Color.cyan)H\(Color.reset)] Show Hand")
     print("[\(Color.cyan)D\(Color.reset)] Deck Status")
     print("")
+    let exhortStatus = engine.exhortAvailable() ? "\(Color.green)доступен" : "\(Color.red)не доступен"
+    print("[\(Color.yellow)E\(Color.reset)] Exhort [\(exhortStatus)\(Color.reset)]")
+    print("")
     print("[\(Color.red)0\(Color.reset)] Exit")
     print("")
     print("Choice: ", terminator: "")
@@ -188,6 +191,17 @@ mainLoop: while true {
         print("")
         print("Press Enter to continue...", terminator: "")
         _ = readLine()
+
+    case "e":
+        if let result = engine.exhort() {
+            let isSuccess = result != "jam" && result != "failure"
+            formatResult(result, isSuccess: isSuccess)
+        } else {
+            print("\(Color.red)Exhort не доступен!\(Color.reset)")
+            print("")
+            print("Press Enter to continue...", terminator: "")
+            _ = readLine()
+        }
 
     default:
         continue
