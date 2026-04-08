@@ -50,6 +50,17 @@ public final class TestActionDeckEngine: @unchecked Sendable {
         return engine.deck.currentHand.map { $0.id }
     }
 
+    // MARK: - Exhort
+
+    public func exhortAvailable() -> Bool {
+        engine.exhortAvailable
+    }
+
+    public func exhort() -> String? {
+        guard let result = engine.exhort() else { return nil }
+        return result.rawValue
+    }
+
     // MARK: - Deck Status
 
     public func deckStatus() -> String {
