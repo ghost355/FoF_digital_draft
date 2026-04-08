@@ -11,6 +11,8 @@ enum Color {
     static let blue = "\u{001B}[34m"
     static let magenta = "\u{001B}[35m"
     static let cyan = "\u{001B}[36m"
+    static let white = "\u{001B}[37m"
+    static let bold = "\u{001B}[1m"
 }
 
 func clearScreen() {
@@ -19,33 +21,45 @@ func clearScreen() {
 
 func showMainMenu() {
     clearScreen()
-    print("\(Color.cyan)")
-    print("╔═══════════════════════════════════════════════════╗")
-    print("║     Action Deck Tester - Console Edition         ║")
-    print("╚═══════════════════════════════════════════════════╝")
+    print("\(Color.cyan)\(Color.bold)")
+    print("╔═══════════════════════════════════════════════════════╗")
+    print("║       Action Deck Tester - Console Edition           ║")
+    print("╚═══════════════════════════════════════════════════════╝")
     print("\(Color.reset)")
     print(engine.deckStatus())
     print("")
-    print("[\(Color.green)1\(Color.reset)] Combat Result (NCM)")
-    print("[\(Color.green)2\(Color.reset)] Hit Effect")
-    print("[\(Color.green)3\(Color.reset)] Grenade Attack")
-    print("[\(Color.green)4\(Color.reset)] Call for Fire")
-    print("[\(Color.green)5\(Color.reset)] Mines")
+    
+    print("\(Color.bold)═══ Рандом ═══\(Color.reset)")
+    print("[\(Color.green)1\(Color.reset)] Random Number")
+    print("[\(Color.green)2\(Color.reset)] Activated Commands")
+    print("[\(Color.green)3\(Color.reset)] Initiative Commands")
+    print("[\(Color.green)4\(Color.reset)] AT Number")
     print("")
-    print("[\(Color.yellow)6\(Color.reset)] HQ Event")
-    print("[\(Color.yellow)7\(Color.reset)] Infiltration")
-    print("[\(Color.yellow)8\(Color.reset)] Cover")
-    print("[\(Color.yellow)9\(Color.reset)] Rally")
+    
+    print("\(Color.bold)═══ Бой ═══\(Color.reset)")
+    print("[\(Color.green)5\(Color.reset)] Combat Result")
+    print("[\(Color.green)6\(Color.reset)] Hit Effect")
+    print("[\(Color.green)7\(Color.reset)] HQ Event")
     print("")
-    print("[\(Color.magenta)A\(Color.reset)] Spotting")
-    print("[\(Color.magenta)B\(Color.reset)] Contact")
-    print("[\(Color.magenta)C\(Color.reset)] Concentrate Fire")
+    
+    print("\(Color.bold)═══ Действия ═══\(Color.reset)")
+    print("[\(Color.yellow)8\(Color.reset)] Infiltration")
+    print("[\(Color.yellow)9\(Color.reset)] Cover")
+    print("[\(Color.yellow)A\(Color.reset)] Rally")
+    print("[\(Color.yellow)B\(Color.reset)] Spotting")
+    print("[\(Color.yellow)C\(Color.reset)] Contact")
+    print("[\(Color.yellow)D\(Color.reset)] Grenade Attack")
+    print("[\(Color.yellow)E\(Color.reset)] Call for Fire")
+    print("[\(Color.yellow)F\(Color.reset)] Concentrate Fire")
     print("")
-    print("[\(Color.cyan)H\(Color.reset)] Show Hand")
-    print("[\(Color.cyan)D\(Color.reset)] Deck Status")
-    print("")
+    
+    print("\(Color.bold)═══ Прочее ═══\(Color.reset)")
     let exhortStatus = engine.exhortAvailable() ? "\(Color.green)доступен" : "\(Color.red)не доступен"
-    print("[\(Color.yellow)E\(Color.reset)] Exhort [\(exhortStatus)\(Color.reset)]")
+    print("[\(Color.magenta)G\(Color.reset)] Mines")
+    print("[\(Color.cyan)H\(Color.reset)] Exhort [\(exhortStatus)\(Color.reset)]")
+    print("")
+    
+    print("[\(Color.white)I\(Color.reset)] Show Hand")
     print("")
     print("[\(Color.red)0\(Color.reset)] Exit")
     print("")
@@ -89,110 +103,129 @@ func getBoolInput(prompt: String) -> Bool? {
 
 mainLoop: while true {
     showMainMenu()
-
+    
     guard let choice = readLine()?.lowercased() else { continue }
-
+    
     switch choice {
     case "0", "q", "quit", "exit":
         print("\(Color.red)Goodbye!\(Color.reset)")
         break mainLoop
-
+    
+    // === Рандом ===
     case "1":
+        guard let option = getIntInput(prompt: "Options (2-12):", min: 2, max: 12, zeroValid: true)
+        else { continue }
+        let result = engine.getRandom(for: option)
+        print("\(Color.cyan)Random Number: \(result)\(Color.reset)")
+        print("")
+        print("Press Enter to continue...", terminator: "")
+        _ = readLine()
+        
+    case "2":
+        let result = engine.activatedCommands()
+        print("\(Color.cyan)Activated Commands: \(result)\(Color.reset)")
+        print("")
+        print("Press Enter to continue...", terminator: "")
+        _ = readLine()
+        
+    case "3":
+        let result = engine.initiativeCommands()
+        print("\(Color.cyan)Initiative Commands: \(result)\(Color.reset)")
+        print("")
+        print("Press Enter to continue...", terminator: "")
+        _ = readLine()
+        
+    case "4":
+        let result = engine.atNumber()
+        print("\(Color.cyan)AT Number: \(result)\(Color.reset)")
+        print("")
+        print("Press Enter to continue...", terminator: "")
+        _ = readLine()
+    
+    // === Бой ===
+    case "5":
         guard let ncm = getIntInput(prompt: "NCM (-4 to +6):", min: -4, max: 6, zeroValid: true)
         else { continue }
         let result = engine.combatResult(ncm: ncm)
         let isSuccess = result == "hit" || result == "pin"
         formatResult(result, isSuccess: isSuccess)
-
-    case "2":
+        
+    case "6":
         print("Experience Level:")
         print("(1 - Veteran, 2 - Line, 3 - Green, 0 - back)")
         guard let expChoice = readLine(), let choice = Int(expChoice), choice >= 1, choice <= 3
         else { continue }
-        if choice == 0 { continue }
         let levels = ["veteran", "line", "green"]
         let result = engine.hitEffect(experience: levels[choice - 1])
         print("\(Color.cyan)Effects: \(result)\(Color.reset)")
         print("Press Enter to continue...", terminator: "")
         _ = readLine()
-
-    case "3":
+        
+    case "7":
+        let result = engine.hqEvent()
+        formatResult(result, isSuccess: result == "success")
+    
+    // === Действия ===
+    case "8":
+        guard let count = getIntInput(prompt: "Card count:", min: 1, max: 51, zeroValid: true)
+        else { continue }
+        let result = engine.infiltration(count: count)
+        formatResult(result, isSuccess: result == "success")
+        
+    case "9":
+        guard let count = getIntInput(prompt: "Card count:", min: 1, max: 51, zeroValid: true)
+        else { continue }
+        let result = engine.cover(count: count)
+        formatResult(result, isSuccess: result == "success")
+        
+    case "a":
+        guard let count = getIntInput(prompt: "Card count:", min: 1, max: 51, zeroValid: true)
+        else { continue }
+        let result = engine.rally(count: count)
+        formatResult(result, isSuccess: result == "success")
+        
+    case "b":
+        guard let count = getIntInput(prompt: "Card count:", min: 1, max: 51, zeroValid: true)
+        else { continue }
+        let result = engine.spotting(count: count)
+        formatResult(result, isSuccess: result == "success")
+        
+    case "c":
+        guard let count = getIntInput(prompt: "Card count:", min: 1, max: 51, zeroValid: true)
+        else { continue }
+        let result = engine.contact(count: count)
+        formatResult(result, isSuccess: result == "success")
+        
+    case "d":
         guard let count = getIntInput(prompt: "Card count:", min: 1, max: 51, zeroValid: true)
         else { continue }
         guard let canJam = getBoolInput(prompt: "Can Jam?") else { continue }
         let result = engine.grenadeAttack(count: count, canJam: canJam)
         let isSuccess = result != "jam" && result != "failure"
         formatResult(result, isSuccess: isSuccess)
-
-    case "4":
+        
+    case "e":
         guard let count = getIntInput(prompt: "Card count:", min: 1, max: 51, zeroValid: true)
         else { continue }
         guard let bnFire = getBoolInput(prompt: "Has BN Fire Mission?") else { continue }
         let result = engine.callForFire(count: count, hasBnFireMission: bnFire)
         let isSuccess = result != "short" && result != "failure"
         formatResult(result, isSuccess: isSuccess)
-
-    case "5":
-        let result = engine.mines()
-        formatResult(result, isSuccess: result == "success")
-
-    case "6":
-        let result = engine.hqEvent()
-        formatResult(result, isSuccess: result == "success")
-
-    case "7":
-        guard let count = getIntInput(prompt: "Card count:", min: 1, max: 51, zeroValid: true)
-        else { continue }
-        let result = engine.infiltration(count: count)
-        formatResult(result, isSuccess: result == "success")
-
-    case "8":
-        guard let count = getIntInput(prompt: "Card count:", min: 1, max: 51, zeroValid: true)
-        else { continue }
-        let result = engine.cover(count: count)
-        formatResult(result, isSuccess: result == "success")
-
-    case "9":
-        guard let count = getIntInput(prompt: "Card count:", min: 1, max: 51, zeroValid: true)
-        else { continue }
-        let result = engine.rally(count: count)
-        formatResult(result, isSuccess: result == "success")
-
-    case "a":
-        guard let count = getIntInput(prompt: "Card count:", min: 1, max: 51, zeroValid: true)
-        else { continue }
-        let result = engine.spotting(count: count)
-        formatResult(result, isSuccess: result == "success")
-
-    case "b":
-        guard let count = getIntInput(prompt: "Card count:", min: 1, max: 51, zeroValid: true)
-        else { continue }
-        let result = engine.contact(count: count)
-        formatResult(result, isSuccess: result == "success")
-
-    case "c":
+        
+    case "f":
         guard let count = getIntInput(prompt: "Card count:", min: 1, max: 51, zeroValid: true)
         else { continue }
         guard let canJam = getBoolInput(prompt: "Can Jam?") else { continue }
         let result = engine.concentrateFire(count: count, canJam: canJam)
         let isSuccess = result != "jam" && result != "failure"
         formatResult(result, isSuccess: isSuccess)
-
+    
+    // === Прочее ===
+    case "g":
+        let result = engine.mines()
+        formatResult(result, isSuccess: result == "success")
+        
     case "h":
-        clearScreen()
-        print(engine.getHand())
-        print("")
-        print("Press Enter to continue...", terminator: "")
-        _ = readLine()
-
-    case "d":
-        clearScreen()
-        print(engine.deckStatus())
-        print("")
-        print("Press Enter to continue...", terminator: "")
-        _ = readLine()
-
-    case "e":
         if let result = engine.exhort() {
             let isSuccess = result != "jam" && result != "failure"
             formatResult(result, isSuccess: isSuccess)
@@ -202,7 +235,15 @@ mainLoop: while true {
             print("Press Enter to continue...", terminator: "")
             _ = readLine()
         }
-
+    
+    // === Info ===
+    case "i":
+        clearScreen()
+        print(engine.getHand())
+        print("")
+        print("Press Enter to continue...", terminator: "")
+        _ = readLine()
+        
     default:
         continue
     }

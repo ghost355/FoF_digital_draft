@@ -25,7 +25,6 @@ enum AttemptType {
     case grenade(cards: Int, canJam: Bool)
     case concentrate(cards: Int, canJam: Bool)
     case callForFire(cards: Int, hasBnFireMission: Bool)
-    // не забыть про Exhort
 }
 
 final class ActionDeckEngine {
