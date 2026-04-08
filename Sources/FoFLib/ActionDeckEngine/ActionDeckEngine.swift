@@ -7,7 +7,7 @@ enum AttemptResult: String {
     case criticalHit, bnFireMisson
 }
 
-enum AttempType {
+enum AttemptType {
     case none
     case random(for: Int)
     case activationCommands
@@ -30,6 +30,44 @@ enum AttempType {
 
 final class ActionDeckEngine {
     var deck: ActionDeck
+
+    var exhortAvailable = false
+
+    var lastAttempt: AttemptType?
+
+    func exhort() -> AttemptResult? {
+        guard exhortAvailable, let attempt = lastAttempt else { return nil }
+        defer {
+            exhortAvailable = false
+            lastAttempt = nil
+        }
+        switch attempt {
+        case .infiltration:
+            return infiltration(count: 1)
+        case .cover:
+            return cover(count: 1)
+        case .spotting:
+            return spotting(count: 1)
+        case .contact:
+            return contact(count: 1)
+        case .rally:
+            return rally(count: 1)
+        case .grenade(_, let canJam):
+            return grenadeAttack(count: 1, canJammed: canJam)
+        case .concentrate(_, let canJam):
+            return concentrateFire(count: 1, canJammed: canJam)
+        case .callForFire(_, let bnFireMission):
+            return callForFire(count: 1, hasBnFireMission: bnFireMission)
+        default:
+            return nil
+        }
+    }
+
+    private func saveForExhort(_ attempt: AttemptType) {
+        guard !exhortAvailable else { return }
+        lastAttempt = attempt
+        exhortAvailable = true
+    }
 
     init(cards: [ActionCard]) {
         deck = ActionDeck(cards: cards)
@@ -89,31 +127,51 @@ final class ActionDeckEngine {
     func infiltration(count: Int) -> AttemptResult {
         let cards = discardAndDrawCards(count)
         let hasInfiltration = cards.contains { $0.icons.contains(.infiltrate) }
-        return hasInfiltration ? .success : .failure
+        let result: AttemptResult = hasInfiltration ? .success : .failure
+        if result == .failure {
+            saveForExhort(.infiltration(cards: count))
+        }
+        return result
     }
 
     func cover(count: Int) -> AttemptResult {
         let cards = discardAndDrawCards(count)
         let hasCover = cards.contains { $0.icons.contains(.cover) }
-        return hasCover ? .success : .failure
+        let result: AttemptResult = hasCover ? .success : .failure
+        if result == .failure {
+            saveForExhort(.cover(cards: count))
+        }
+        return result
     }
 
     func spotting(count: Int) -> AttemptResult {
         let cards = discardAndDrawCards(count)
         let hasCrosshairs = cards.contains { $0.icons.contains(.crosshairs) }
-        return hasCrosshairs ? .success : .failure
+        let result: AttemptResult = hasCrosshairs ? .success : .failure
+        if result == .failure {
+            saveForExhort(.spotting(cards: count))
+        }
+        return result
     }
 
     func contact(count: Int) -> AttemptResult {
         let cards = discardAndDrawCards(count)
         let hasContact = cards.contains { $0.icons.contains(.contact) }
-        return hasContact ? .success : .failure
+        let result: AttemptResult = hasContact ? .success : .failure
+        if result == .failure {
+            saveForExhort(.contact(cards: count))
+        }
+        return result
     }
 
     func rally(count: Int) -> AttemptResult {
         let cards = discardAndDrawCards(count)
         let hasRally = cards.contains { $0.icons.contains(.rally) }
-        return hasRally ? .success : .failure
+        let result: AttemptResult = hasRally ? .success : .failure
+        if result == .failure {
+            saveForExhort(.rally(cards: count))
+        }
+        return result
     }
 
     func mines() -> AttemptResult {
@@ -132,14 +190,22 @@ final class ActionDeckEngine {
         if canJammed && hasJamIcon {
             return .jam
         }
+        let result: AttemptResult
         switch grenadeCount {
         case 0:
-            return .failure
+            result = .failure
         case 1:
-            return .success
+            result = .success
         default:
-            return .criticalHit
+            result = .criticalHit
         }
+
+        if result == .failure {
+            saveForExhort(.grenade(cards: count, canJam: canJammed))
+        }
+
+        return result
+
     }
 
     func concentrateFire(count: Int, canJammed: Bool) -> AttemptResult {
@@ -151,14 +217,20 @@ final class ActionDeckEngine {
         if canJammed && hasJamIcon {
             return .jam
         }
+        let result: AttemptResult
         switch grenadeCount {
         case 0:
-            return .failure
+            result = .failure
         case 1:
-            return .success
+            result = .success
         default:
-            return .criticalHit
+            result = .criticalHit
         }
+        if result == .failure {
+            saveForExhort(.concentrate(cards: count, canJam: canJammed))
+        }
+
+        return result
     }
 
     func callForFire(count: Int, hasBnFireMission: Bool) -> AttemptResult {
@@ -174,6 +246,10 @@ final class ActionDeckEngine {
         if hasBnFireMission && hasTripleBurst {
             return .bnFireMisson
         }
-        return hasBurst || hasTripleBurst ? .success : .failure
+        let result: AttemptResult = hasBurst || hasTripleBurst ? .success : .failure
+        if result == .failure {
+            saveForExhort(.callForFire(cards: count, hasBnFireMission: hasBnFireMission))
+        }
+        return result
     }
 }
