@@ -53,6 +53,16 @@ enum HitEffect: String, Codable {
     case assault = "A"
 }
 
+enum UnitStatus: String, Codable {
+    case goodOrder
+    case pinned
+    case assaultTeam
+    case fireTeam
+    case litterTeam
+    case paralyzedTeam
+    case casualty
+}
+
 enum Side: String, Codable {
     case us, german, northKorean, vietcong, nva, katusa, chinese
 }

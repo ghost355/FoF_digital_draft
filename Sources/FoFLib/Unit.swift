@@ -3,34 +3,11 @@ import Foundation
 
 // MARK: - Основные перечисления
 
-enum Side: String, Codable {
-    case us, german, northKorean, vietcong, nva, katusa, chinese
-}
-
-enum UnitType: String, Codable {
-    case squad, hq, fo, weaponsTeam, sniper, leader, spotter, vehicle, aircraft, staff, runner,
-        aboveHQ
-}
-
-enum ExperienceLevel: String, Codable {
-    case green, line, veteran
-}
-
 enum MovementType: String, Codable {
     case wheeled, tracked, halfTrack, helicopter, fixedWing
 }
 
 // MARK: - Состояния
-
-enum UnitStatus: String, Codable {
-    case goodOrder
-    case pinned
-    case assaultTeam
-    case fireTeam
-    case litterTeam
-    case paralyzedTeam
-    case casualty
-}
 
 enum VOF: Codable {
     case small

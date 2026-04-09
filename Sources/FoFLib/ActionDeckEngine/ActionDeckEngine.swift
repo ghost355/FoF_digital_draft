@@ -1,32 +1,5 @@
 // ActionDeckEngine.swift
 
-enum AttemptResult: String {
-
-    case success, failure
-    case jam, short, mines
-    case criticalHit, bnFireMisson
-}
-
-enum AttemptType {
-    case none
-    case random(for: Int)
-    case activationCommands
-    case initiativeCommands
-    case atNumber
-    case combatResult(ncm: Int)
-    case hitEffect(experience: ExperienceLevel)
-    case hqEvent
-    case infiltration(cards: Int)
-    case cover(cards: Int)
-    case spotting(cards: Int)
-    case contact(cards: Int)
-    case rally(cards: Int)
-    case mines
-    case grenade(cards: Int, canJam: Bool)
-    case concentrate(cards: Int, canJam: Bool)
-    case callForFire(cards: Int, hasBnFireMission: Bool)
-}
-
 final class ActionDeckEngine {
     var deck: ActionDeck
 

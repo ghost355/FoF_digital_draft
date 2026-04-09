@@ -31,34 +31,6 @@ extension ActionCard {
 
 }
 
-enum ActionCardIcon: String, Codable {
-    case infiltrate
-    case contact
-    case rally
-    case cover
-    case crosshairs
-    case grenade
-    case burst
-    case tripleBurst
-    case short
-    case jam
-    case hqEvent
-}
-
-enum CombatResult: String, Codable {
-    case miss
-    case pin
-    case hit
-}
-
-enum HitEffect: String, Codable {
-    case casualty = "C"
-    case paralyzed = "P"
-    case litter = "L"
-    case fire = "F"
-    case assault = "A"
-}
-
 struct HitEffectTable: Codable {
     let veteran: [HitEffect]
     let line: [HitEffect]
