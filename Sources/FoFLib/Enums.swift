@@ -75,3 +75,11 @@ enum UnitType: String, Codable {
 enum ExperienceLevel: String, Codable {
     case green, line, veteran
 }
+
+enum Campaign: String, Codable {
+    case keepUpFire, normandy, heartbreakRidge, naktongRiver, vietnam, demo
+}
+
+enum MissionType: String, Codable {
+    case offensive, deffensive, patrol
+}
