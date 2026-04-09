@@ -2,8 +2,14 @@
 
 class GameEngine {
     var context: GameContext
+    private var phaseProcessor: PhaseProcessor
 
-    init(context: GameContext) {
-        self.context = context
+    init(missionName: missionName) {
+        self.context = GameContext(missionName: missionName)
+        self.phaseProcessor = phaseProcessor(context: context)
+    }
+
+    func start() {
+        phaseProcessor.start()
     }
 }
