@@ -81,5 +81,23 @@ enum Campaign: String, Codable {
 }
 
 enum MissionType: String, Codable {
-    case offensive, deffensive, patrol
+    case offensive, defensive, patrol
+}
+
+enum TurnPhase {
+    case friendlyHigherHQEvent
+    case enemyActivity(MissionType)  // .defensive или .offensive
+    case friendlyCommandActivation
+    case friendlyCommandInitiative
+    case mutualCaptureAndRetreat
+    case atCombatAndVehicleMovement
+    case mutualCombat(MutualCombatSubphase)
+    case cleanup
+}
+
+enum MutualCombatSubphase {
+    case fireMissionUpdate
+    case potentialContactEvaluation
+    case pinnedRecovery
+    case combatEffects
 }
