@@ -1,11 +1,14 @@
 // TestActionDeckEngine.swift
 
+import Foundation
+
 public final class TestActionDeckEngine: @unchecked Sendable {
     private var engine: ActionDeckEngine
     private var cards: [ActionCard]
 
     public init() {
-        cards = loadJSON("actionDeck", as: [ActionCard].self, from: .module)
+        let bundle = Bundle.module
+        cards = loadJSON("actionDeck", as: [ActionCard].self, from: bundle)
         engine = ActionDeckEngine(cards: cards)
     }
 

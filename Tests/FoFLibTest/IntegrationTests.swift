@@ -9,10 +9,11 @@ final class IntegrationTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
+        let bundle = Bundle.module
         cards = loadJSON(
             "realActionDeck",
             as: [ActionCard].self,
-            from: .module
+            from: bundle
         )
         engine = ActionDeckEngine(cards: cards)
     }
