@@ -13,7 +13,96 @@ struct Mission: Codable {
     let enemyTactics: EnemyTactic
     let enemyExperience: ExperienceLevel
     let enemyUsingUnit: [Unit]
+    let additinalAttachments: [Unit]
+    let fireSupport: [FireSupport]
+    let friendlyHigherHqEvents: [Event]
+    let enemyHigherHqEvents: [Event]
+    let enemyForcePackage: EnemyForcePackage
 
+}
+
+struct EnemyForcePackages: Codable {
+    let forces: [EnemyForcePackageEntry]
+    let contacts: [EnemyContactPackageEntry]
+    let placement: [EnemyUnitPlacementEntry]
+}
+
+struct EnemyForcePackageEntry: Codable {
+    let id: Int
+    let randomNumber: RandomFromToOpt?
+    let package: [EnemyPackage]
+    let placePdfVof: Bool
+    let isSpotted: Bool
+    let placementRule: EnemyPlacementRule
+}
+
+enum EnemyPlacementRule: Codable {
+    case maxLosRange, maxLos, maxRange
+    case closeRange, longRange, veryLongRange, pointBlankRange
+}
+
+struct EnemyUnitPlacementEntry: Codable {
+    let row: Row?
+    let randomNumber: RandomFromToOpt
+    let direction: PlaceDirection
+}
+enum PlaceDirection: String, Codable {
+    case front, leftFront, rightFront
+}
+
+struct EnemyPackage: Codable {
+    let unit: Unit
+    let cover: Cover?
+}
+
+enum Cover: Codable {
+    case foxhole, trenche, pillowbox, bunker, deepBunker
+}
+
+struct EnemyContactPackageEntry: Codable {
+    let id: Int
+    let pcA: RandomFromToOpt
+    let pcB: RandomFromToOpt
+    let pcC: RandomFromToOpt
+    let randomOption: Int
+}
+
+struct RandomFromToOpt: Codable {
+    let from: Int
+    let to: Int
+    let option: Int  
+}
+
+struct EventTurnRandom: Codable {
+    let startTurn: Int
+    let endTurn: Int
+    let randomNumber: RandomFromToOpt
+}
+
+struct Event: Codable {
+    let description: String
+    let randomNubmerAndTurn: [EventTurnRandom]
+    let type: EventType
+}
+
+enum EventType: String, Codable {
+    case situationReport, commTrouble, artilleryDisplacing, checkingUp, troubleOnFlank
+    case coOnFlankAhead, btnScreamingForAction, ammoResupply
+    case evacuateCasualties, displaceMtr, displaceLdr, displaceHMG, rally, fallBack, counterAttack
+}
+
+struct FireSupport: Codable {
+    let agency: String
+    let ammo: FireMissionAmmo
+    let combatMod: Int
+    let artyFoDraw: Int?
+    let mtrFoDraw: Int?
+    let coHqDraw: Int?
+    let fireMission: Int
+}
+
+enum FireMissionAmmo: String, Codable {
+    case he, ws, tot
 }
 
 struct Map: Codable {

@@ -100,6 +100,3 @@ enum MutualCombatSubphase {
     case combatEffects
 }
 
-enum EnemyTactic: String, Codable {
-    case deliberateDefense
-}

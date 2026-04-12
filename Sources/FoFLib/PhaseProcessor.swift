@@ -7,11 +7,7 @@ class PhaseProcessor {
 
     init(context: GameContext) {
         self.context = context
-        self.phases = buildPhases()
-    }
-
-    private func buildPhases() -> [TurnPhase] {
-        return [
+        self.phases = [
             .friendlyHigherHQEvent,
             .enemyActivity(.defensive),
             .friendlyCommandActivation,
