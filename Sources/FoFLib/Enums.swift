@@ -40,9 +40,7 @@ enum ActionCardIcon: String, Codable {
 }
 
 enum CombatResult: String, Codable {
-    case miss
-    case pin
-    case hit
+    case miss, pin, hit
 }
 
 enum HitEffect: String, Codable {
@@ -76,7 +74,7 @@ enum ExperienceLevel: String, Codable {
     case green, line, veteran
 }
 
-enum Campaign: String, Codable {
+enum CampaignName: String, Codable {
     case keepUpFire, normandy, heartbreakRidge, naktongRiver, vietnam, demo
 }
 
@@ -100,4 +98,8 @@ enum MutualCombatSubphase {
     case potentialContactEvaluation
     case pinnedRecovery
     case combatEffects
+}
+
+enum EnemyTactic: String, Codable {
+    case deliberateDefense
 }
