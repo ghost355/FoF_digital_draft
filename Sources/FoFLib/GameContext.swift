@@ -2,7 +2,12 @@
 import Foundation
 
 class GameContext {
+    let campaign: Campaign
     let mission: Mission
+    let map: Map
+    let tables: GameTable
+    let usUnits: [Unit]
+    let enemyUnits: [Unit]
     var turn: Int = 1
 
     init(missionName: String) {
@@ -13,4 +18,8 @@ class GameContext {
         }
     }
 
+}
+
+struct GameTable {
+    let x: String
 }

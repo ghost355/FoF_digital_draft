@@ -17,23 +17,7 @@ struct Mission: Codable {
     let fireSupport: [FireSupport]
     let friendlyHigherHqEvents: [Event]
     let enemyHigherHqEvents: [Event]
-    let enemyForcePackage: EnemyForcePackage
 
-}
-
-struct EnemyForcePackages: Codable {
-    let forces: [EnemyForcePackageEntry]
-    let contacts: [EnemyContactPackageEntry]
-    let placement: [EnemyUnitPlacementEntry]
-}
-
-struct EnemyForcePackageEntry: Codable {
-    let id: Int
-    let randomNumber: RandomFromToOpt?
-    let package: [EnemyPackage]
-    let placePdfVof: Bool
-    let isSpotted: Bool
-    let placementRule: EnemyPlacementRule
 }
 
 enum EnemyPlacementRule: Codable {
@@ -50,13 +34,8 @@ enum PlaceDirection: String, Codable {
     case front, leftFront, rightFront
 }
 
-struct EnemyPackage: Codable {
-    let unit: Unit
-    let cover: Cover?
-}
-
 enum Cover: Codable {
-    case foxhole, trenche, pillowbox, bunker, deepBunker
+    case foxhole, trenche, pillowbox, bunker, deepBunker, building
 }
 
 struct EnemyContactPackageEntry: Codable {
@@ -70,7 +49,7 @@ struct EnemyContactPackageEntry: Codable {
 struct RandomFromToOpt: Codable {
     let from: Int
     let to: Int
-    let option: Int  
+    let option: Int
 }
 
 struct EventTurnRandom: Codable {
@@ -103,12 +82,6 @@ struct FireSupport: Codable {
 
 enum FireMissionAmmo: String, Codable {
     case he, ws, tot
-}
-
-struct Map: Codable {
-    let row: Row
-    let column: Column
-    let facedDown: [Row: Bool]
 }
 
 struct TacticalControl: Codable {
